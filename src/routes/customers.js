@@ -271,7 +271,7 @@ router.delete('/:customerId/documents/:documentId', async (req, res) => {
 router.post('/:customerId/query', async (req, res) => {
   try {
     const { customerId } = req.params;
-    const { query, options = {} } = req.body;
+    const { query, options = {}, intent } = req.body;
     const customerService = req.app.get('customerService');
     
     if (!query || typeof query !== 'string') {
@@ -288,11 +288,18 @@ router.post('/:customerId/query', async (req, res) => {
       });
     }
 
-    const response = await customerService.queryDocuments(customerId, query, options);
+    // Pass intent through options if provided
+    const queryOptions = { ...options };
+    if (intent) {
+      queryOptions.intent = intent;
+    }
+
+    const response = await customerService.queryDocuments(customerId, query, queryOptions);
     
     res.json({
       customerId,
       query,
+      ...(intent && { intent }),
       ...response
     });
   } catch (error) {

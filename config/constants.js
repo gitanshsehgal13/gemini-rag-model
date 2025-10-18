@@ -23,7 +23,7 @@ module.exports = {
   
   // Vector Database Configuration
   VECTOR_DIMENSION: 768,
-  SIMILARITY_THRESHOLD: 0.5,
+  SIMILARITY_THRESHOLD: 0.4,
   
   // Embedding Configuration
   // Uses text-embedding-004 for text embeddings and gemini-1.5-pro for multimodal content

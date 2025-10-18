@@ -5,6 +5,7 @@ const GeminiService = require('./geminiService');
 const ClaimDocumentService = require('./claimDocumentService');
 const HospitalService = require('./hospitalService');
 const PolicyTimelineService = require('./policyTimelineService');
+const IntentJourneyService = require('./intentJourneyService');
 const path = require('path');
 
 class CustomerService {
@@ -21,6 +22,9 @@ class CustomerService {
     
     // Initialize policy timeline service
     this.policyTimelineService = new PolicyTimelineService();
+    
+    // Initialize intent journey service
+    this.intentJourneyService = new IntentJourneyService(this.geminiService, this.hospitalService);
     
     // Conversation history storage (in-memory for now)
     this.conversationHistory = new Map(); // customerId -> conversation array
@@ -331,8 +335,21 @@ class CustomerService {
       const {
         topK = 5,
         similarityThreshold = 0.5, // Lowered to 0.5 for better recall on general queries
-        includeContext = true
+        includeContext = true,
+        intent,
+        communicationMode = 'WHATSAPP'
       } = options;
+
+      // Check if this is an intent-based journey query
+      if (intent) {
+        console.log(`Processing intent-based journey: ${intent}`);
+        return await this.intentJourneyService.processIntentJourney(
+          customerId,
+          intent,
+          query,
+          { communicationMode }
+        );
+      }
 
       // Check if customer exists
       const customer = this.vectorStore.getCustomer(customerId);
@@ -353,6 +370,9 @@ class CustomerService {
           sourceChunks: [],
           queryType: 'out_of_scope'
         };
+      } else if (queryAnalysis.type === 'policy_summary_static') {
+        // Return static policy summary response
+        return this.getStaticPolicySummary(customerId);
       } else if (queryAnalysis.type === 'reschedule_request') {
         // Handle reschedule requests
         // Add user message to conversation history
@@ -628,6 +648,39 @@ Your health checkup is all set! The sample collection team will visit during the
       console.error('Error querying documents:', error);
       throw error;
     }
+  }
+
+  /**
+   * Get static policy summary for a customer
+   * @param {string} customerId - Customer ID
+   * @returns {Object} - Static policy summary response
+   */
+  getStaticPolicySummary(customerId) {
+    // Static policy summary response
+    const staticResponse = `Hey Vineet, I can certainly help you with a summary of your policy!
+
+I see that you have the TATA AIG MediCare Premier policy with us, policy number 7000170537-02. Your policy is active and in force, covering you from September 12, 2025 to September 11, 2026.
+
+Here's a quick rundown:
+
+**Coverage:** You're covered for medically necessary treatments due to illness, disease, or injury, up to a sum insured of Rs. 50 Lacs during the policy period.
+
+**Key Benefits:** You have a health check-up benefit of up to Rs. 10,000 per policy (1% of your Sum Insured). You can also avail of cashless treatment at our network hospitals, and you'll get a No Claim Bonus when you renew your policy.
+
+**Rider Benefits:** Your policy includes rider benefits like Hospital Cash Benefit and Global Suraksha.
+
+Is there anything specific you'd like to know more about?`;
+
+    return {
+      answer: staticResponse,
+      confidence: 1.0,
+      sourceChunks: [],
+      queryType: 'policy_summary_static',
+      generatedAt: new Date().toISOString(),
+      embeddingModel: 'static',
+      embeddingDimensions: 0,
+      processedAt: new Date().toISOString()
+    };
   }
 
   /**
@@ -912,6 +965,23 @@ Your health checkup is all set! The sample collection team will visit during the
 
     const text = query.toLowerCase().trim();
 
+    // Check for policy summary/details queries first - return static response
+    const policySummaryPatterns = [
+      /\b(policy\s+summary|policy\s+details|policy\s+information|policy\s+overview)\b/i,
+      /\b(my\s+policy\s+summary|my\s+policy\s+details|my\s+policy\s+information)\b/i,
+      /\b(i\s+want\s+my\s+policy\s+summary|i\s+want\s+my\s+policy\s+details)\b/i,
+      /\b(give\s+me\s+my\s+policy\s+summary|give\s+me\s+my\s+policy\s+details)\b/i,
+      /\b(show\s+me\s+my\s+policy\s+summary|show\s+me\s+my\s+policy\s+details)\b/i,
+      /\b(tell\s+me\s+about\s+my\s+policy|tell\s+me\s+my\s+policy\s+details)\b/i,
+      /\b(policy\s+summary|policy\s+details|policy\s+information)\b/i
+    ];
+
+    for (const pattern of policySummaryPatterns) {
+      if (pattern.test(text)) {
+        return { type: 'policy_summary_static' };
+      }
+    }
+
       // Conversational patterns that should get LLM-generated responses
       const conversationalPatterns = [
         // Thanks and acknowledgments (with optional punctuation and additional words)
@@ -1104,9 +1174,10 @@ Your health checkup is all set! The sample collection team will visit during the
                           /\bget\s+my\s+(health\s+checkup|checkup|appointment|booking)/i.test(text);
     
     // Exclude policy coverage questions about health checkups
-    const isPolicyCoverageQuery = /\b(do\s+i\s+have|is|am\s+i|are\s+we)\s+.*\b(health\s+checkup|checkup)\s+.*\b(covered|coverage|included|benefit|available|eligible)/i.test(text) ||
-                                 /\b(health\s+checkup|checkup)\s+.*\b(covered|coverage|included|benefit|available|eligible)/i.test(text) ||
-                                 /\b(covered|coverage|included|benefit|available|eligible)\s+.*\b(health\s+checkup|checkup)/i.test(text);
+    const isPolicyCoverageQuery = /\b(do\s+i\s+(have|get)|is|am\s+i|are\s+we)\s+.*\b(health\s+checkup|checkup)\s+.*\b(covered|coverage|included|benefit|available|eligible|free)/i.test(text) ||
+                                 /\b(health\s+checkup|checkup)\s+.*\b(covered|coverage|included|benefit|available|eligible|free)/i.test(text) ||
+                                 /\b(covered|coverage|included|benefit|available|eligible|free)\s+.*\b(health\s+checkup|checkup)/i.test(text) ||
+                                 /\b(do\s+i\s+get)\s+.*\b(free)\s+.*\b(health\s+checkup|checkup)/i.test(text);
     
     if (isBookingQuery || isPolicyCoverageQuery) {
       return { isHospitalRelated: false };
@@ -1114,7 +1185,7 @@ Your health checkup is all set! The sample collection team will visit during the
 
     // Hospital-related keywords and patterns
     const hospitalPatterns = {
-      nearby: /\b(nearby|near|close|nearest|around|within|distance)\s+(hospital|clinic|medical|healthcare)/i,
+      nearby: /\b(hospitals?|clinics?)\s+(nearby|near|close|nearest|around|within|in)\s+([a-zA-Z\s]+)|(?:nearby|near|close|nearest|around|within)\s+(hospitals?|clinics?)/i,
       emergency: /\b(emergency|urgent|accident|critical|immediate|ambulance)\s*(hospital|medical|care)/i,
       network: /\b(network|cashless|covered|approved|empanelled|tie.?up)\s*(hospital|clinic)/i,
       search: /\b(hospital|clinic|medical center|healthcare)\s*(in|at|near|around)\s*([a-zA-Z\s\d]+)/i,
@@ -1165,6 +1236,15 @@ Your health checkup is all set! The sample collection team will visit during the
     }
 
     if (hospitalPatterns.nearby.test(text)) {
+      // Extract location from nearby pattern
+      const nearbyMatch = text.match(hospitalPatterns.nearby);
+      if (nearbyMatch && nearbyMatch[3]) {
+        // Extract location from "hospitals near Andheri" format
+        const extractedLoc = nearbyMatch[3].trim();
+        location = location || extractedLoc;
+        searchTerm = searchTerm || extractedLoc;
+      }
+      
       return {
         isHospitalRelated: true,
         queryType: 'nearby',
@@ -1218,13 +1298,19 @@ Your health checkup is all set! The sample collection team will visit during the
     }
 
     // Check for mentions of specific hospitals
-    if (hospitalPatterns.specificHospital.test(text) && (text.includes('details') || text.includes('info') || text.includes('about'))) {
+    if (hospitalPatterns.specificHospital.test(text)) {
       const hospitalMatch = text.match(hospitalPatterns.specificHospital);
       const hospitalName = hospitalMatch ? hospitalMatch[1].trim() : null;
       
+      // If it contains details/info/about keywords, it's a details request
+      // Otherwise, it's a general search for that specific hospital
+      const queryType = (text.includes('details') || text.includes('info') || text.includes('about')) 
+        ? 'hospitalDetails' 
+        : 'search';
+      
       return {
         isHospitalRelated: true,
-        queryType: 'hospitalDetails',
+        queryType: queryType,
         searchTerm: hospitalName,
         location,
         pincode,

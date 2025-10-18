@@ -7,6 +7,7 @@ A personalized RAG system built with Gemini AI that acts as a dedicated personal
 - **Personal Policy Assistant**: Acts as a dedicated personal assistant for each policyholder
 - **Post-Issuance Servicing**: Focused on policy servicing after issuance (claims, payments, changes)
 - **Personalized Communication**: Uses "with us", "your policy" language for warm, personal interactions
+- **Intent-Based Journeys**: Context-aware conversational flows with predefined business goals and brand voice
 - **Hospital Recommendations**: Comprehensive Mumbai hospital database with network hospitals, emergency care, and location-based search
 - **Multimodal Processing**: Handles text documents and images using Gemini 1.5 Pro
 - **Document Processing**: PDF, DOCX, TXT, and image file support with intelligent chunking
@@ -41,6 +42,10 @@ A personalized RAG system built with Gemini AI that acts as a dedicated personal
 ### Customer Endpoints
 - **POST** `/api/customers/:customerId/documents` - Upload policy documents
 - **POST** `/api/customers/:customerId/query` - Query policy information with intelligent hospital recommendations
+  - **Request Body**:
+    - `query` (string, required): The query text
+    - `intent` (string, optional): The intent name (e.g., "EVENT_DRIVEN_CLAIM_EPISODE")
+    - `options` (object, optional): Query options (topK, similarityThreshold, includeContext)
 - **GET** `/api/customers/:customerId/summary` - Get policy summary
 - **GET** `/api/customers/:customerId/suggested-questions` - Get suggested questions
 - **GET** `/api/customers/:customerId/documents` - List customer documents
@@ -97,6 +102,13 @@ Upload policy documents for a customer and then query information about their po
      -d '{"query": "मेरा प्रीमियम कितना है?"}'
    ```
 
+6. **Query with Intent** (optional):
+   ```bash
+   curl -X POST http://localhost:3000/api/customers/customer123/query \
+     -H "Content-Type: application/json" \
+     -d '{"query": "What is my claim status?", "intent": "EVENT_DRIVEN_CLAIM_EPISODE"}'
+   ```
+
 ### Hospital Search Features
 
 The system includes comprehensive hospital search capabilities for Mumbai:
@@ -113,3 +125,67 @@ The system includes comprehensive hospital search capabilities for Mumbai:
 - "network hospitals"
 - "cashless hospitals in [area]"
 - "hospitals in [pincode/zone]"
+
+### Intent-Based Journeys
+
+The system supports intent-based conversational journeys that guide customers through specific processes with context-aware responses.
+
+**How It Works**:
+1. Frontend sends `intent` field with query (e.g., `"EVENT_DRIVEN_CLAIM_EPISODE"`)
+2. System loads intent configuration from `data/intentBasedJouneys.json`
+3. Maintains conversation history for each customer journey
+4. Gemini generates responses based on:
+   - Brand voice and tone
+   - Business goals
+   - Recommended action flow
+   - Previous conversation context
+
+**Example Intent Journey Request**:
+```bash
+curl -X POST http://localhost:3000/api/customers/9988676666/query \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "I need to find a hospital near me",
+    "intent": "EVENT_DRIVEN_CLAIM_EPISODE",
+    "options": {
+      "communicationMode": "WHATSAPP"
+    }
+  }'
+```
+
+**Response Format**:
+```json
+{
+  "customerId": "9988676666",
+  "query": "I need to find a hospital near me",
+  "intent": "EVENT_DRIVEN_CLAIM_EPISODE",
+  "answer": "Hey there! It seems like you're trying to find hospitals near you...",
+  "conversationId": "uuid-conversation-id",
+  "conversationHistory": [
+    {
+      "communicationMode": "WHATSAPP",
+      "incommingMessage": "I need to find a hospital near me",
+      "timestamp": "2025-10-12T..."
+    },
+    {
+      "communicationMode": "WHATSAPP",
+      "sentMessage": "Hey there! It seems like...",
+      "timestamp": "2025-10-12T..."
+    }
+  ],
+  "confidence": 1.0,
+  "queryType": "intent_journey"
+}
+```
+
+**Features**:
+- ✅ Maintains conversation context per customer
+- ✅ Follows predefined business goals and action flows
+- ✅ Consistent brand voice across conversations
+- ✅ Automatic conversation history management
+- ✅ Support for multiple communication channels (WhatsApp, etc.)
+
+**Test Intent Journey**:
+```bash
+npm run test:intent-journey
+```

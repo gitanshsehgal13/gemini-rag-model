@@ -5,6 +5,17 @@ const router = express.Router();
 const CONFIG = require('../../config/constants');
 
 /**
+ * Remove special characters from text for voice-friendly output
+ * @param {string} text - Input text
+ * @returns {string} - Cleaned text without special characters
+ */
+function removeSpecialCharacters(text) {
+  if (!text) return text;
+  // Remove special characters: * \ % $ # & ^ @
+  return text.replace(/[\*\\%\$#&\^@]/g, '');
+}
+
+/**
  * Dialogflow Webhook Endpoint
  * Handles incoming requests from Dialogflow and integrates with existing RAG system
  * Always uses customer ID from constants
@@ -13,14 +24,19 @@ router.post('/dialogflow', async (req, res) => {
   try {
     console.log('Received Dialogflow webhook request:', JSON.stringify(req.body, null, 2));
 
-    const { queryResult, session } = req.body;
+    const { queryResult, session, queryParams } = req.body;
+    
+    // Extract input contexts for context continuity
+    const inputContexts = req.body.queryResult?.outputContexts || [];
+    console.log('Input contexts:', JSON.stringify(inputContexts, null, 2));
     
     if (!queryResult || !queryResult.queryText) {
+      const errorMsg = removeSpecialCharacters("I didn't understand your request. Please try again.");
       return res.status(400).json({
-        fulfillmentText: "I didn't understand your request. Please try again.",
+        fulfillmentText: errorMsg,
         fulfillmentMessages: [{
           text: {
-            text: ["I didn't understand your request. Please try again."]
+            text: [errorMsg]
           }
         }]
       });
@@ -39,18 +55,47 @@ router.post('/dialogflow', async (req, res) => {
     
     if (!customerService) {
       console.error('Customer service not available');
+      const errorMsg = removeSpecialCharacters("Sorry, the service is temporarily unavailable. Please try again later.");
       return res.status(500).json({
-        fulfillmentText: "Sorry, the service is temporarily unavailable. Please try again later.",
+        fulfillmentText: errorMsg,
         fulfillmentMessages: [{
           text: {
-            text: ["Sorry, the service is temporarily unavailable. Please try again later."]
+            text: [errorMsg]
           }
         }]
       });
     }
 
-    // Use existing queryDocuments functionality
-    const result = await customerService.queryDocuments(customerId, queryText);
+    // Extract context parameters for enhanced query processing
+    let contextParams = {};
+    let conversationHistory = [];
+    
+    // Get context from input contexts
+    inputContexts.forEach(context => {
+      if (context.parameters) {
+        contextParams = { ...contextParams, ...context.parameters };
+      }
+    });
+    
+    // Build conversation history from context
+    if (contextParams.lastQuery) {
+      conversationHistory.push({
+        query: contextParams.lastQuery,
+        answer: contextParams.lastAnswer,
+        timestamp: contextParams.lastQueryTime || new Date().toISOString()
+      });
+    }
+
+    console.log('Context parameters:', contextParams);
+    console.log('Conversation history:', conversationHistory);
+
+    // Use existing queryDocuments functionality with context
+    const queryOptions = {
+      context: contextParams,
+      conversationHistory: conversationHistory
+    };
+    
+    const result = await customerService.queryDocuments(customerId, queryText, queryOptions);
 
     console.log(`Dialogflow query result for ${customerId}:`, {
       confidence: result.confidence,
@@ -59,24 +104,56 @@ router.post('/dialogflow', async (req, res) => {
     });
 
     // Format response for Dialogflow
-    const answerText = result.answer || "I couldn't find specific information about your query. Please contact customer service for more detailed assistance.";
+    const rawAnswerText = result.answer || "I couldn't find specific information about your query. Please contact customer service for more detailed assistance.";
     
+    // Remove special characters for voice-friendly output
+    const answerText = removeSpecialCharacters(rawAnswerText);
+    
+    // Enhanced context management for follow-up queries
+    const outputContexts = [
+      {
+        name: `${session}/contexts/customer-session`,
+        lifespanCount: 20, // Increased lifespan for better context retention
+        parameters: {
+          customerId: customerId,
+          lastQueryType: result.queryType,
+          confidence: result.confidence,
+          lastQuery: queryText,
+          lastAnswer: answerText,
+          lastQueryTime: new Date().toISOString(),
+          // Preserve existing context parameters
+          ...contextParams,
+          // Add conversation turn counter
+          conversationTurn: (contextParams.conversationTurn || 0) + 1
+        }
+      },
+      {
+        name: `${session}/contexts/conversation-history`,
+        lifespanCount: 15,
+        parameters: {
+          customerId: customerId,
+          conversationHistory: JSON.stringify([
+            ...conversationHistory,
+            {
+              query: queryText,
+              answer: answerText,
+              timestamp: new Date().toISOString(),
+              queryType: result.queryType,
+              confidence: result.confidence
+            }
+          ])
+        }
+      }
+    ];
+
     const dialogflowResponse = {
+      fulfillmentText: answerText,
       fulfillmentMessages: [{
         text: {
           text: [answerText]
         }
       }],
-      // Optional: Add output contexts to maintain customer session
-      outputContexts: [{
-        name: `${session}/contexts/customer-session`,
-        lifespanCount: 10,
-        parameters: {
-          customerId: customerId,
-          lastQueryType: result.queryType,
-          confidence: result.confidence
-        }
-      }]
+      outputContexts: outputContexts
     };
 
     console.log('Sending Dialogflow response:', JSON.stringify(dialogflowResponse, null, 2));
@@ -87,7 +164,8 @@ router.post('/dialogflow', async (req, res) => {
     console.error('Error processing Dialogflow webhook:', error);
     console.error('Error stack:', error.stack);
     
-    const errorText = `Sorry, I encountered an error while processing your request: ${error.message}. Please try again.`;
+    const rawErrorText = `Sorry, I encountered an error while processing your request: ${error.message}. Please try again.`;
+    const errorText = removeSpecialCharacters(rawErrorText);
     
     res.status(500).json({
       fulfillmentText: errorText,

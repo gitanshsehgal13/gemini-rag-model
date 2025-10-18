@@ -3,7 +3,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 class GeminiService {
   constructor(apiKey) {
     this.genAI = new GoogleGenerativeAI(apiKey);
-    this.model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' }); // Using Gemini 2.0 Flash experimental
+    this.model = this.genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' }); // Using Gemini 2.5 Flash Lite
     
     // Configuration for text generation
     this.generationConfig = {
@@ -327,6 +327,34 @@ Your Role & Instructions:
     - For CASHLESS claims: Focus ONLY on pre-authorization, hospital coordination, and getting treatment approved. DO NOT ask for document uploads - the hospital handles all documentation directly with us.
     - For REIMBURSEMENT claims: Guide them on document collection and upload process since they need to submit documents for processing.
     - If claim type is unclear, ask whether they want cashless (no upfront payment) or reimbursement (pay first, get refunded) to provide the right guidance.
+19. PERSONALIZED AI AGENT APPROACH: Always emphasize that you are a personalized AI agent who can handle things for them. Use phrases like:
+    - "I can help you with that right now"
+    - "Let me handle this for you"
+    - "I'll take care of this process for you"
+    - "You don't need to do anything - I'll coordinate everything"
+    - "I'm your personal AI agent and I can do this for you"
+20. EMPATHETIC COMMUNICATION: Be empathetic and humble in all responses. Never assume the customer is asking "again" or make them feel like they're repeating themselves. Every question is valid and deserves a fresh, helpful response. Avoid phrases like "I see you're asking again" or "as we discussed before" - instead, respond as if it's the first time they're asking, with warmth and understanding.
+    - "I'll guide you through this step by step and handle the coordination"
+    - "I can initiate this process for you right away"
+    - "I'll organize everything and submit it for processing"
+    - "You just need to provide the basic details - I'll handle the rest"
+    - "I'm here to make this as easy as possible for you"
+    - "I'll coordinate with our teams and get this sorted for you"
+    - "I can start this process immediately - you don't need to worry about the details"
+21. CUSTOMER-SPECIFIC INFORMATION ONLY - CRITICAL: Your policy documents may contain tables showing benefits for MULTIPLE sum insured amounts (like Rs. 50 Lacs, Rs. 75 Lacs, Rs. 1 Crore, etc.). You MUST:
+    a) FIRST identify the customer's ACTUAL Sum Insured from their policy details (look for "Sum Insured", "Basic Sum Insured", or "SI" in their policy information)
+    b) THEN provide ONLY the benefit amount for THEIR SPECIFIC Sum Insured - NOT a list of all possible amounts
+    c) NEVER present the benefit table as-is with multiple "If your Sum Insured is X" options
+    
+    CORRECT Example (if their Sum Insured is Rs. 50 Lacs):
+    "Your health check-up benefit is covered up to Rs. 10,000 per year"
+    
+    WRONG Examples (DO NOT DO THIS):
+    ❌ "If your Sum Insured is Rs. 50 Lacs, you get Rs. 10,000..."
+    ❌ "The limit depends on your Sum Insured: Rs. 50 Lacs = Rs. 10,000, Rs. 75 Lacs = Rs. 15,000..."
+    ❌ Listing multiple sum insured scenarios
+    
+    If you cannot find their specific Sum Insured amount in the policy information, say "Let me check your specific benefit amount with our team"
 
 IMPORTANT - Content Filtering Rules:
 - DO NOT include document formatting artifacts like "Page X of Y", "IRDA Registration No", "CIN:", "UIN:", etc.
@@ -689,6 +717,40 @@ Answer:`;
     } catch (error) {
       console.error('Error checking query relevance:', error);
       return true; // Default to true to be safe
+    }
+  }
+
+  /**
+   * Generate intent-based response for journey conversations
+   * @param {string} systemPrompt - System prompt with intent context
+   * @param {string} userMessage - User's message
+   * @param {string} customerId - Customer ID
+   * @returns {Promise<string>} - Generated response
+   */
+  async generateIntentBasedResponse(systemPrompt, userMessage, customerId) {
+    try {
+      console.log(`Generating intent-based response for customer ${customerId}`);
+
+      const fullPrompt = `${systemPrompt}\n\nCustomer Message: ${userMessage}\n\nYour Response:`;
+
+      const result = await this.model.generateContent({
+        contents: [{ role: 'user', parts: [{ text: fullPrompt }] }],
+        generationConfig: {
+          temperature: 0.9, // High temperature for creative, engaging conversation
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 2048
+        }
+      });
+
+      const response = result.response.text().trim();
+      console.log(`Generated intent-based response: ${response.substring(0, 100)}...`);
+
+      return response;
+
+    } catch (error) {
+      console.error('Error generating intent-based response:', error);
+      throw new Error(`Failed to generate intent-based response: ${error.message}`);
     }
   }
 }
