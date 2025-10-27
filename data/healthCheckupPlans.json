@@ -1,0 +1,34 @@
+[
+    {
+        "planId" : "36831",
+        "testId" : [ 
+            "36831"
+        ],
+        "description" : "Liver Function Test, Calcium, Kidney Function Test, Complete Blood Count, Erythrocyte Sedimentation Rate, Glycosylated Hemoglobin, Lipid Profile, Phosphorus, Serum, Urine Routine & Microscopy, Glucose - Fasting, Thyroid profile Total, Vitamin B12, Vitamin D (25-OH), Blood Grouping (ABO), Iron Studies - Basic, Chest X-Ray, ECG - Resting, USG - Whole Abdomen (included Pelvis), 2D Echocardiography/TMT, Pulmonary Function Test (PFT)",
+        "name" : "Tata AIG Complete Care - Advance",
+        "eligibilityValue" : 4400,
+        "testDetails" : [ 
+            "Liver Function Test", 
+            "Calcium", 
+            "Kidney Function Test", 
+            "Complete Blood Count", 
+            "Erythrocyte Sedimentation Rate", 
+            "Glycosylated Hemoglobin", 
+            "Lipid Profile", 
+            "Phosphorus, Serum", 
+            "Urine Routine & Microscopy", 
+            "Glucose - Fasting", 
+            "Thyroid profile Total", 
+            "Vitamin B12", 
+            "Vitamin D (25-OH)", 
+            "Blood Grouping (ABO)", 
+            "Iron Studies - Basic", 
+            "Chest X-Ray", 
+            "ECG - Resting", 
+            "USG - Whole Abdomen (included Pelvis)", 
+            "2D Echocardiography/TMT", 
+            "Pulmonary Function Test (PFT)"
+        ],
+        "isEnabled" : true
+    }
+]

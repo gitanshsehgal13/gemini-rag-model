@@ -1,0 +1,291 @@
+[
+    {
+        "intent": "EVENT_DRIVEN_CLAIM_EPISODE",
+        "status": "active",
+        "brand_voice": {
+            "tone": "empathetic, supportive, professional",
+            "style": "conversational but concise",
+            "persona": "Claim Concierge"
+        },
+        "business_goals": [
+            "Provide real-time claim tracking and updates",
+            "Offer post-recovery engagement and medical follow-up",
+            "Increase app usage and customer satisfaction"
+        ],
+        "conversationFlow": {
+            "stages": [
+                {
+                    "id": "greeting",
+                    "name": "Initial Greeting",
+                    "agent": "GreetingAgent",
+                    "requiredData": [],
+                    "collectData": [
+                        "initialIntent"
+                    ],
+                    "promptTemplate": "Greet the customer warmly. Ask if they need help finding hospitals for admission or treatment.",
+                    "transitions": {
+                        "yes": "identify_patient",
+                        "no": "close_politely",
+                        "default": "identify_patient"
+                    }
+                },
+                {
+                    "id": "identify_patient",
+                    "name": "Identify Patient",
+                    "agent": "DataCollectionAgent",
+                    "requiredData": [
+                        "initialIntent"
+                    ],
+                    "collectData": [
+                        "patientRelation",
+                        "patientName"
+                    ],
+                    "promptTemplate": "Ask which family member needs care (self, wife, son, daughter, etc.). Can you actual names from policy data.",
+                    "transitions": {
+                        "collected": "medical_reason"
+                    }
+                },
+                {
+                    "id": "medical_reason",
+                    "name": "Collect Medical Reason",
+                    "agent": "DataCollectionAgent",
+                    "requiredData": [
+                        "patientRelation"
+                    ],
+                    "collectData": [
+                        "medicalReason",
+                        "location"
+                    ],
+                    "promptTemplate": "Ask about the medical reason for admission and preferred location if not mentioned.",
+                    "transitions": {
+                        "collected": "show_hospitals"
+                    }
+                },
+                {
+                    "id": "show_hospitals",
+                    "name": "Show Hospital Options",
+                    "agent": "HospitalSearchAgent",
+                    "requiredData": [
+                        "medicalReason",
+                        "location"
+                    ],
+                    "collectData": [
+                        "selectedHospital"
+                    ],
+                    "promptTemplate": "Present 5 hospitals with relevant department. Mention all are covered by Tata AIG for cashless treatment.",
+                    "transitions": {
+                        "selected": "confirm_admission",
+                        "shown": "await_hospital_selection"
+                    }
+                },
+                {
+                    "id": "await_hospital_selection",
+                    "name": "Await Hospital Selection",
+                    "agent": "DataCollectionAgent",
+                    "requiredData": [],
+                    "collectData": [
+                        "selectedHospital"
+                    ],
+                    "promptTemplate": "Wait for customer to select a hospital or ask for more information.",
+                    "transitions": {
+                        "collected": "confirm_admission"
+                    }
+                },
+                {
+                    "id": "confirm_admission",
+                    "name": "Confirm Admission Intent",
+                    "agent": "AdmissionAgent",
+                    "requiredData": [
+                        "selectedHospital"
+                    ],
+                    "collectData": [
+                        "admissionConfirmed"
+                    ],
+                    "promptTemplate": "Ask: 'Do you seek admission or hospitalization in the hospital?'",
+                    "transitions": {
+                        "yes": "collect_admission_details",
+                        "no": "close_politely"
+                    }
+                },
+                {
+                    "id": "collect_admission_details",
+                    "name": "Collect Admission Details",
+                    "agent": "AdmissionAgent",
+                    "requiredData": [
+                        "admissionConfirmed"
+                    ],
+                    "collectData": [
+                        "estimatedCost",
+                        "admissionDate",
+                        "admissionTime"
+                    ],
+                    "promptTemplate": "Ask for estimated cost AND date/time. If only one provided, ask for the missing one (don't repeat what's already given).",
+                    "transitions": {
+                        "partial": "collect_admission_details",
+                        "complete": "initiate_claim"
+                    }
+                },
+                {
+                    "id": "collect_preferences",
+                    "name": "Collect Preferences",
+                    "agent": "AdmissionAgent",
+                    "requiredData": [
+                        "estimatedCost",
+                        "admissionDate"
+                    ],
+                    "collectData": [
+                        "preferences"
+                    ],
+                    "promptTemplate": "Confirm coordination. Ask if they have any specific requirements or preferences for hospital stay.",
+                    "transitions": {
+                        "collected": "initiate_claim",
+                        "skipped": "initiate_claim"
+                    }
+                },
+                {
+                    "id": "initiate_claim",
+                    "name": "Initiate Claim",
+                    "agent": "ClaimInitiationAgent",
+                    "requiredData": [
+                        "selectedHospital",
+                        "admissionDate",
+                        "estimatedCost",
+                        "patientName",
+                        "medicalReason"
+                    ],
+                    "collectData": [
+                        "intimationId"
+                    ],
+                    "promptTemplate": "Initiate claim silently. No customer interaction needed.",
+                    "transitions": {
+                        "success": "schedule_followups",
+                        "failure": "handle_error"
+                    }
+                },
+                {
+                    "id": "schedule_followups",
+                    "name": "Schedule Follow-up Messages",
+                    "agent": "SchedulingAgent",
+                    "requiredData": [
+                        "intimationId",
+                        "admissionDate"
+                    ],
+                    "collectData": [],
+                    "promptTemplate": "Schedule automated follow-up messages silently.",
+                    "transitions": {
+                        "complete": "end"
+                    }
+                },
+                {
+                    "id": "admission_confirmed",
+                    "name": "Admission Confirmed",
+                    "agent": "ResponseAgent",
+                    "requiredData": [
+                        "intimationId",
+                        "selectedHospital",
+                        "admissionDate"
+                    ],
+                    "collectData": [],
+                    "promptTemplate": "Confirm admission with intimation ID and all details. Wish them speedy recovery.",
+                    "transitions": {
+                        "complete": "end"
+                    }
+                },
+                {
+                    "id": "teleconsultation_response",
+                    "name": "Handle Tele-consultation Response",
+                    "agent": "TeleconsultationAgent",
+                    "requiredData": [],
+                    "collectData": [
+                        "teleconsultationInterest"
+                    ],
+                    "promptTemplate": "Customer responded to scheduled tele-consultation message. Check if they want to proceed with scheduling.",
+                    "transitions": {
+                        "yes": "collect_consultation_preferences",
+                        "no": "close_politely"
+                    }
+                },
+                {
+                    "id": "collect_consultation_preferences",
+                    "name": "Collect Consultation Preferences",
+                    "agent": "TeleconsultationAgent",
+                    "requiredData": [
+                        "teleconsultationInterest"
+                    ],
+                    "collectData": [
+                        "consultationDate",
+                        "consultationTime"
+                    ],
+                    "promptTemplate": "Ask for their preferred date and time for the tele-consultation. Clarify this is a consultation, not admission.",
+                    "transitions": {
+                        "collected": "confirm_consultation"
+                    }
+                },
+                {
+                    "id": "confirm_consultation",
+                    "name": "Confirm Consultation",
+                    "agent": "TeleconsultationAgent",
+                    "requiredData": [
+                        "consultationDate",
+                        "consultationTime"
+                    ],
+                    "collectData": [],
+                    "promptTemplate": "Confirm the tele-consultation appointment details and ask them to be available at the scheduled time.",
+                    "transitions": {
+                        "complete": "end"
+                    }
+                },
+                {
+                    "id": "close_politely",
+                    "name": "Close Politely",
+                    "agent": "ResponseAgent",
+                    "requiredData": [],
+                    "collectData": [],
+                    "promptTemplate": "Thank them and invite to reach out if they need assistance.",
+                    "transitions": {
+                        "complete": "end"
+                    }
+                }
+            ]
+        },
+        "recomendedAction": [
+            "Hey {{customerName}} it seems like you are trying to find hospitals near you. I hope everything is fine. Do you seek any addmission for any issue? I can help you with it",
+            "If No reply from customer close the chat with a message 'Please feel free to reach out to us if you need any assistance. Take care!'",
+            "If customer replies Yes then repy i hope it is n ot an emewrgency and everything is alright can you tell for which faimly memeber are you trying to look for?' this question will be asked only once and mandatory to ask to customer",
+            "customer replies for myself",
+            "ok alright can you tell reason for seeking medical attention?I will help to hospital with speciality for the same",
+            "customer replies with reason",
+            "I'm sorry to hear this I can help you find the best {{speciality department name}} nearest hospitals near anderi",
+            "Below are 5 nearest hospitals with {{speciality department name}} department  within 5 km radius",
+            "1. Hospital Name, Address, Distance from your location, Contact Number",
+            "2. Hospital Name, Address, Distance from your location, Contact Number",
+            "...so on up to 5 hospitals",
+            "Please let me know if you need any further assistance or information regarding these hospitals",
+            "If customer replies No then reply 'Please feel free to reach out to me if you need any assistance. Take care!'",
+            "If customer replies Yes then reply Please let me know if you need any further assistance on any specific hospital",
+            "If customer replies with specific hospital name then reply 'Sure I can help you with that with some more details about that hospital and ask customer do you seek addmisson or hospitalization in the hospital?'this is an hospital admission not a consultation nor appointment",
+            "If customer replies No then reply 'Please feel free to reach out to me if you need any assistance. Take care!'",
+            "If customer replies Yes then reply I will help you with the admission process' Ask estimated cost of treatment AND date and time of admission ' these are mandatory to ask to customer",
+            "Customer will provide cost and/or date time (may be provided separately in multiple messages)",
+            "Once BOTH cost and date/time are provided, reply: Ok noted I'll coordinate with the hospital for your admission on {{date and time}}. Please provide me with any specific requirements or preferences you may have for your stay at the hospital",
+            "customer replies with requirements",
+            "Thank you for the information. I will ensure that your preferences are communicated to the hospital staff.",
+            "Once your admission is confirmed, I will notify you with all the necessary details. then initiate claim funtion will be called with all the input ",
+            "Please let me know if there is anything else I can assist you with during this process. Wishing you a smooth and speedy recovery!",
+            "once we recieve the response from claim intimation API send this messgae  we have successfully completed the admission process for you at {{hospital name}} on {{date and time}} with intimation Id{{intimation_Id}}. The hospital has been informed of your specific requirements and preferences. If you need any further assistance or information, please feel free to reach out to me. Wishing you a smooth and speedy recovery!",
+            "schedule messagae: Make sure you take documents like aadhar card, insurance card, ID proof, medical records, and any other relevant documents for the admission process",
+            "schedule messagae: I noticed you have been admitted to the hospital. I hope everything is going well. Please let me know if you need any assistance or support during your stay. Wishing you a speedy recovery!",
+            "schedule messagae:  I hope you are doing well. I wanted to check in and see how your stay at the hospital is going. If you need any assistance or have any questions, please feel free to reach out to me. Wishing you a smooth recovery!",
+            "schedule messagae:  I  noticed you have been discharged from the hospital. I hope everything went well and you are on the path to recovery. If you need any assistance or support during this time, please feel free to reach out to me. Wishing you good health and a speedy recovery!",
+            "schedule messagae:  Your Cashless claim with claim Number 4300002322 for the recent hospital admission has been processed successfully. The claim amount of Rs 430067 has been settled directly with the hospital. If you have any questions or need further assistance regarding your claim, please feel free to reach out to me. Wishing you continued good health!",
+            "schedule messagae: I hope you are doing well as part of recovey process do you want me to schedule a follow-up tele consultation with your healthcare provider. Regular check-ups are important to monitor your recovery progress and address any concerns you may have. Please let me know if you would like me to arrange this for you",
+            "customer replies Yes",
+            "'Great! I will schedule a follow-up tele consultation with your healthcare provider. Please let me know your preferred date and time for the consultation' this is a consultation not a admission",
+            "customer replies with date and time",
+            "Thank you for providing your preferred date and time. I'll inform you ince we book the appointment",
+            "We have successfully scheduled your follow-up tele consultation with your healthcare provider on {{date and time}}. Please ensure you are available at that time for the consultation.",
+            "customer replies with thanks",
+            "You're welcome!"
+        ]
+    }
+]

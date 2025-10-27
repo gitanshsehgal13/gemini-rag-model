@@ -1,0 +1,148 @@
+{
+  "NEW_CUSTOMER_ONBOARDING": {
+    "journeyId": "NEW_CUSTOMER_ONBOARDING",
+    "journeyName": "Newly Onboarded Customer Journey",
+    "customerStage": "0-90 days into policy",
+    "policyType": "Medicare Premier",
+    "description": "This journey welcomes new TATA AIG customers, builds familiarity, and collects health and family data for personalized engagement.",
+    "events": [
+      {
+        "id": "WELCOME_EXPERIENCE_INITIATED",
+        "title": "Welcome Experience",
+        "timeOffsetDays": 3,
+        "triggerType": "system",
+        "dependsOn": null,
+        "channel": "App / Physical Concierge",
+        "message": "Hi {{customerName}}! Welcome to the TATA AIG Family. I'm your personal health concierge, and I'll help you make the most of your policy and stay on top of your health goals.",
+        "ctas": [
+          {
+            "label": "Know My Policy Coverage",
+            "action": "POLICY_COVERAGE_VIEWED"
+          },
+          {
+            "label": "Explore App",
+            "action": "FAMILIARITY_BUILDING_INITIATED"
+          }
+        ]
+      },
+      {
+        "id": "POLICY_COVERAGE_VIEWED",
+        "title": "Policy Coverage Viewed",
+        "timeOffsetDays": 0,
+        "triggerType": "user",
+        "dependsOn": "WELCOME_EXPERIENCE_INITIATED",
+        "message": "Here's a summary of your Medicare Premier coverage — including annual check-ups, hospitalization benefits, and concierge assistance.",
+        "ctas": [
+          {
+            "label": "Continue",
+            "action": "FAMILIARITY_BUILDING_INITIATED"
+          }
+        ]
+      },
+      {
+        "id": "FAMILIARITY_BUILDING_INITIATED",
+        "title": "Familiarity Building",
+        "timeOffsetDays": 15,
+        "triggerType": "system",
+        "dependsOn": "POLICY_COVERAGE_VIEWED",
+        "channel": "App Concierge",
+        "message": "To personalize your care, could I ask a few quick questions about your health habits and family? It helps us tailor your check-ups and alerts. We never share your info — it's just to serve you better.",
+        "ctas": [
+          {
+            "label": "Start My Health Profile",
+            "action": "HEALTH_PROFILE_SURVEY"
+          }
+        ]
+      },
+      {
+        "id": "HEALTH_PROFILE_SURVEY",
+        "title": "Health Profile Survey",
+        "timeOffsetDays": 0,
+        "triggerType": "user",
+        "dependsOn": "FAMILIARITY_BUILDING_INITIATED",
+        "message": "Great! Let's quickly set up your health preferences.",
+        "questions": [
+          "Do you have any ongoing medications or conditions?",
+          "Who usually takes care of medical appointments in your family?",
+          "Do your parents or spouse have regular check-ups elsewhere? (We can help track those too if you wish)",
+          "Which hospital or doctor do you usually prefer nearby?"
+        ],
+        "ctas": [
+          {
+            "label": "Submit",
+            "action": "HEALTH_PROFILE_COMPLETED"
+          }
+        ]
+      },
+      {
+        "id": "HEALTH_PROFILE_COMPLETED",
+        "title": "Health Profile Completed",
+        "timeOffsetDays": 0,
+        "triggerType": "system",
+        "dependsOn": "HEALTH_PROFILE_SURVEY",
+        "message": "Thanks, {{customerName}}! Your health preferences have been saved. We'll use this info to tailor reminders and check-up suggestions.",
+        "ctas": [
+          {
+            "label": "View My Health Summary",
+            "action": "FAMILY_MAPPING_PROMPT"
+          }
+        ]
+      },
+      {
+        "id": "FAMILY_MAPPING_PROMPT",
+        "title": "Family Mapping Prompt",
+        "timeOffsetDays": 7,
+        "triggerType": "system",
+        "dependsOn": "HEALTH_PROFILE_COMPLETED",
+        "message": "Hey {{customerName}}, since you mentioned your parents sometimes need tests, would you like me to send reminders or offers for them too? You can track their reports right here in your app.",
+        "ctas": [
+          {
+            "label": "Yes, Add Family Member",
+            "action": "FAMILY_MEMBER_ADDED"
+          },
+          {
+            "label": "Skip",
+            "action": "JOURNEY_COMPLETE"
+          }
+        ]
+      },
+      {
+        "id": "FAMILY_MEMBER_ADDED",
+        "title": "Family Member Added",
+        "timeOffsetDays": 0,
+        "triggerType": "user",
+        "dependsOn": "FAMILY_MAPPING_PROMPT",
+        "message": "Wonderful! We'll keep their info secure and make health management easier for your entire family.",
+        "ctas": [
+          {
+            "label": "Build Extended Family Map",
+            "action": "EXTENDED_FAMILY_MAP_CREATED"
+          }
+        ]
+      },
+      {
+        "id": "EXTENDED_FAMILY_MAP_CREATED",
+        "title": "Extended Family Map Created",
+        "timeOffsetDays": 1,
+        "triggerType": "system",
+        "dependsOn": "FAMILY_MEMBER_ADDED",
+        "message": "Your family health map has been created successfully. You can now view or manage reminders for all members in one place.",
+        "ctas": [
+          {
+            "label": "Finish",
+            "action": "JOURNEY_COMPLETE"
+          }
+        ]
+      },
+      {
+        "id": "JOURNEY_COMPLETE",
+        "title": "Journey Complete",
+        "timeOffsetDays": 90,
+        "triggerType": "system",
+        "dependsOn": "EXTENDED_FAMILY_MAP_CREATED",
+        "message": "Welcome journey completed. You're now all set to enjoy personalized health assistance and benefits under your Medicare Premier policy.",
+        "ctas": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+    "policyNumber": "7000170537-02",
+    "policyholder": "Vineet Singh",
+    "policyPeriod": {
+        "from": "12 Sept 2025",
+        "to": "11 Sept 2026"
+    },
+    "plan": "TATA AIG MediCare Premier",
+    "sumInsured": "₹50,00,000",
+    "cumulativeBonus": "₹37,50,000",
+    "grossPremium": "₹54,940",
+    "insuredMembers": [
+        {
+            "name": "Vineet Singh",
+            "dob": "15 Jun 1988",
+            "age": 37,
+            "relationship": "Self",
+            "memberId": "IDV00079566201035"
+        },
+        {
+            "name": "Punita Singh",
+            "dob": "24 Oct 1989",
+            "age": 35,
+            "relationship": "Spouse",
+            "memberId": "IDV00079566202033"
+        },
+        {
+            "name": "Aradhya Singh",
+            "dob": "18 May 2016",
+            "age": 9,
+            "relationship": "Daughter",
+            "memberId": "IDV00079566203007"
+        },
+        {
+            "name": "Akshat Singh",
+            "dob": "29 Mar 2012",
+            "age": 13,
+            "relationship": "Son",
+            "memberId": "IDV00079566204011"
+        }
+    ]
+}

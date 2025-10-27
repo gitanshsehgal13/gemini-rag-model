@@ -1,0 +1,871 @@
+[
+    {
+        "id": 1,
+        "test_id": null,
+        "test_name": null,
+        "num_total": 86,
+        "num_abnormal": 20,
+        "observations": [
+            {
+                "id": 0,
+                "parameter_name": "Calcium",
+                "type": "numeric",
+                "units": "mg/dL",
+                "value": "10.0",
+                "meaning": "NORMAL",
+                "reference_low": 8.7,
+                "reference_high": 10.4
+            },
+            {
+                "id": 1,
+                "parameter_name": "Glucose - Fasting",
+                "type": "numeric",
+                "units": "mg/dL",
+                "value": "89.0",
+                "meaning": "NORMAL",
+                "reference_low": 70,
+                "reference_high": 99
+            },
+            {
+                "id": 2,
+                "parameter_name": "Glycosylated Hemoglobin (HbA1c)",
+                "type": "numeric",
+                "units": "%",
+                "value": "5.3",
+                "meaning": "NORMAL",
+                "reference_low": 4,
+                "reference_high": 5.6
+            },
+            {
+                "id": 3,
+                "parameter_name": "Estimated average glucose (eAG)",
+                "type": "text",
+                "units": "mg/dL",
+                "value": "105.41",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 4,
+                "parameter_name": "Cholesterol - Total",
+                "type": "text",
+                "units": "mg/dL",
+                "value": "210.0",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": "=199.9"
+            },
+            {
+                "id": 5,
+                "parameter_name": "Triglycerides",
+                "type": "text",
+                "units": "mg/dL",
+                "value": "94.0",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": "=149.9"
+            },
+            {
+                "id": 6,
+                "parameter_name": "Cholesterol - HDL",
+                "type": "text",
+                "units": "mg/dL",
+                "value": "54.0",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 7,
+                "parameter_name": "Cholesterol - LDL",
+                "type": "text",
+                "units": "mg/dL",
+                "value": "137.0",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": "=99.9"
+            },
+            {
+                "id": 8,
+                "parameter_name": "Cholesterol- VLDL",
+                "type": "numeric",
+                "units": "mg/dL",
+                "value": "19.0",
+                "meaning": "NORMAL",
+                "reference_low": 0,
+                "reference_high": 29.9
+            },
+            {
+                "id": 9,
+                "parameter_name": "Cholesterol : HDL Cholesterol",
+                "type": "text",
+                "units": "Ratio",
+                "value": "3.9",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 10,
+                "parameter_name": "LDL : HDL Cholesterol",
+                "type": "text",
+                "units": "Ratio",
+                "value": "2.54",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 11,
+                "parameter_name": "Non HDL Cholesterol",
+                "type": "numeric",
+                "units": "mg/dl",
+                "value": "156.0",
+                "meaning": "HIGH",
+                "reference_low": 0,
+                "reference_high": 129.9
+            },
+            {
+                "id": 12,
+                "parameter_name": "Bilirubin-Total",
+                "type": "numeric",
+                "units": "mg/dL",
+                "value": "0.3",
+                "meaning": "NORMAL",
+                "reference_low": 0.3,
+                "reference_high": 1.2
+            },
+            {
+                "id": 13,
+                "parameter_name": "Bilirubin-Direct",
+                "type": "numeric",
+                "units": "mg/dL",
+                "value": "0.11",
+                "meaning": "NORMAL",
+                "reference_low": 0,
+                "reference_high": 0.3
+            },
+            {
+                "id": 14,
+                "parameter_name": "Bilirubin-Indirect",
+                "type": "numeric",
+                "units": "mg/dL",
+                "value": "0.19",
+                "meaning": "LOW",
+                "reference_low": 0.2,
+                "reference_high": 0.8
+            },
+            {
+                "id": 15,
+                "parameter_name": "Protein, Total",
+                "type": "numeric",
+                "units": "g/dL",
+                "value": "7.5",
+                "meaning": "NORMAL",
+                "reference_low": 5.7,
+                "reference_high": 8.2
+            },
+            {
+                "id": 16,
+                "parameter_name": "Albumin",
+                "type": "numeric",
+                "units": "g/dL",
+                "value": "4.1",
+                "meaning": "NORMAL",
+                "reference_low": 3.2,
+                "reference_high": 4.8
+            },
+            {
+                "id": 17,
+                "parameter_name": "Globulin",
+                "type": "numeric",
+                "units": "g/dL",
+                "value": "3.4",
+                "meaning": "NORMAL",
+                "reference_low": 2.3,
+                "reference_high": 4.1
+            },
+            {
+                "id": 18,
+                "parameter_name": "A/G Ratio",
+                "type": "numeric",
+                "units": "Ratio",
+                "value": "1.21",
+                "meaning": "NORMAL",
+                "reference_low": 0.8,
+                "reference_high": 1.9
+            },
+            {
+                "id": 19,
+                "parameter_name": "SGOT (Aspartate Aminotransferase)",
+                "type": "numeric",
+                "units": "U/L",
+                "value": "19.0",
+                "meaning": "NORMAL",
+                "reference_low": 0,
+                "reference_high": 33.9
+            },
+            {
+                "id": 20,
+                "parameter_name": "SGPT (Alanine Transaminase)",
+                "type": "numeric",
+                "units": "U/L",
+                "value": "15.0",
+                "meaning": "NORMAL",
+                "reference_low": 10,
+                "reference_high": 49
+            },
+            {
+                "id": 21,
+                "parameter_name": "SGOT/SGPT",
+                "type": "text",
+                "units": "Ratio",
+                "value": "1.27",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 22,
+                "parameter_name": "Alkaline Phosphatase",
+                "type": "numeric",
+                "units": "U/L",
+                "value": "133.0",
+                "meaning": "HIGH",
+                "reference_low": 46,
+                "reference_high": 116
+            },
+            {
+                "id": 23,
+                "parameter_name": "Gamma Glutamyltransferase (GGT)",
+                "type": "numeric",
+                "units": "U/L",
+                "value": "26.0",
+                "meaning": "NORMAL",
+                "reference_low": 0,
+                "reference_high": 37.9
+            },
+            {
+                "id": 24,
+                "parameter_name": "Phosphorus",
+                "type": "numeric",
+                "units": "mg/dl",
+                "value": "3.3",
+                "meaning": "NORMAL",
+                "reference_low": 2.4,
+                "reference_high": 5.1
+            },
+            {
+                "id": 25,
+                "parameter_name": "Blood Urea Nitrogen",
+                "type": "numeric",
+                "units": "mg/dL",
+                "value": "6.0",
+                "meaning": "LOW",
+                "reference_low": 9,
+                "reference_high": 23
+            },
+            {
+                "id": 26,
+                "parameter_name": "Urea",
+                "type": "numeric",
+                "units": "mg/dL",
+                "value": "12.84",
+                "meaning": "LOW",
+                "reference_low": 19.26,
+                "reference_high": 49.22
+            },
+            {
+                "id": 27,
+                "parameter_name": "Creatinine",
+                "type": "numeric",
+                "units": "mg/dL",
+                "value": "0.6",
+                "meaning": "NORMAL",
+                "reference_low": 0.55,
+                "reference_high": 1.02
+            },
+            {
+                "id": 28,
+                "parameter_name": "Uric Acid",
+                "type": "numeric",
+                "units": "mg/dL",
+                "value": "4.0",
+                "meaning": "NORMAL",
+                "reference_low": 2.7,
+                "reference_high": 6.1
+            },
+            {
+                "id": 29,
+                "parameter_name": "Sodium",
+                "type": "numeric",
+                "units": "mEq/L",
+                "value": "138.0",
+                "meaning": "NORMAL",
+                "reference_low": 136,
+                "reference_high": 145
+            },
+            {
+                "id": 30,
+                "parameter_name": "Potassium",
+                "type": "numeric",
+                "units": "mEq/L",
+                "value": "4.18",
+                "meaning": "NORMAL",
+                "reference_low": 3.5,
+                "reference_high": 5.1
+            },
+            {
+                "id": 31,
+                "parameter_name": "Chloride",
+                "type": "numeric",
+                "units": "mmol/L",
+                "value": "108.0",
+                "meaning": "HIGH",
+                "reference_low": 98,
+                "reference_high": 107
+            },
+            {
+                "id": 32,
+                "parameter_name": "BUN/Creatinine Ratio",
+                "type": "text",
+                "units": "Ratio",
+                "value": "10.0",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 33,
+                "parameter_name": "Hemoglobin",
+                "type": "numeric",
+                "units": "g/dL",
+                "value": "8.9",
+                "meaning": "LOW",
+                "reference_low": 12,
+                "reference_high": 15
+            },
+            {
+                "id": 34,
+                "parameter_name": "RBC",
+                "type": "numeric",
+                "units": "10^6/cu.mm",
+                "value": "4.21",
+                "meaning": "NORMAL",
+                "reference_low": 3.8,
+                "reference_high": 4.8
+            },
+            {
+                "id": 35,
+                "parameter_name": "HCT",
+                "type": "numeric",
+                "units": "%",
+                "value": "28.3",
+                "meaning": "LOW",
+                "reference_low": 36,
+                "reference_high": 46
+            },
+            {
+                "id": 36,
+                "parameter_name": "MCV",
+                "type": "numeric",
+                "units": "fL",
+                "value": "67.2",
+                "meaning": "LOW",
+                "reference_low": 83,
+                "reference_high": 101
+            },
+            {
+                "id": 37,
+                "parameter_name": "MCH",
+                "type": "numeric",
+                "units": "pg",
+                "value": "21.1",
+                "meaning": "LOW",
+                "reference_low": 27,
+                "reference_high": 32
+            },
+            {
+                "id": 38,
+                "parameter_name": "MCHC",
+                "type": "numeric",
+                "units": "g/dL",
+                "value": "31.4",
+                "meaning": "LOW",
+                "reference_low": 31.5,
+                "reference_high": 34.5
+            },
+            {
+                "id": 39,
+                "parameter_name": "RDW-CV",
+                "type": "numeric",
+                "units": "%",
+                "value": "16.6",
+                "meaning": "HIGH",
+                "reference_low": 11.5,
+                "reference_high": 14
+            },
+            {
+                "id": 40,
+                "parameter_name": "Total Leucocyte Count",
+                "type": "numeric",
+                "units": "10^3/µL",
+                "value": "5.29",
+                "meaning": "NORMAL",
+                "reference_low": 4,
+                "reference_high": 10
+            },
+            {
+                "id": 41,
+                "parameter_name": "Neutrophils",
+                "type": "numeric",
+                "units": "%",
+                "value": "63.3",
+                "meaning": "NORMAL",
+                "reference_low": 40,
+                "reference_high": 80
+            },
+            {
+                "id": 42,
+                "parameter_name": "Lymphocytes",
+                "type": "numeric",
+                "units": "%",
+                "value": "31.6",
+                "meaning": "NORMAL",
+                "reference_low": 20,
+                "reference_high": 40
+            },
+            {
+                "id": 43,
+                "parameter_name": "Monocytes",
+                "type": "numeric",
+                "units": "%",
+                "value": "3.5",
+                "meaning": "NORMAL",
+                "reference_low": 2,
+                "reference_high": 10
+            },
+            {
+                "id": 44,
+                "parameter_name": "Eosinophils",
+                "type": "numeric",
+                "units": "%",
+                "value": "1.5",
+                "meaning": "NORMAL",
+                "reference_low": 1,
+                "reference_high": 6
+            },
+            {
+                "id": 45,
+                "parameter_name": "Basophils",
+                "type": "numeric",
+                "units": "%",
+                "value": "0.1",
+                "meaning": "NORMAL",
+                "reference_low": 0,
+                "reference_high": 2
+            },
+            {
+                "id": 46,
+                "parameter_name": "Absolute Neutrophil Count",
+                "type": "numeric",
+                "units": "10^3/µL",
+                "value": "3.35",
+                "meaning": "NORMAL",
+                "reference_low": 2,
+                "reference_high": 7
+            },
+            {
+                "id": 47,
+                "parameter_name": "Absolute Lymphocyte Count",
+                "type": "numeric",
+                "units": "10^3/µL",
+                "value": "1.67",
+                "meaning": "NORMAL",
+                "reference_low": 1,
+                "reference_high": 3
+            },
+            {
+                "id": 48,
+                "parameter_name": "Absolute Monocyte Count",
+                "type": "numeric",
+                "units": "10^3/µL",
+                "value": "0.19",
+                "meaning": "LOW",
+                "reference_low": 0.2,
+                "reference_high": 1
+            },
+            {
+                "id": 49,
+                "parameter_name": "Absolute Eosinophil Count",
+                "type": "numeric",
+                "units": "10^3/µL",
+                "value": "0.08",
+                "meaning": "NORMAL",
+                "reference_low": 0.02,
+                "reference_high": 0.5
+            },
+            {
+                "id": 50,
+                "parameter_name": "Absolute Basophil Count",
+                "type": "numeric",
+                "units": "10^3/µL",
+                "value": "0.01",
+                "meaning": "LOW",
+                "reference_low": 0.02,
+                "reference_high": 0.1
+            },
+            {
+                "id": 51,
+                "parameter_name": "Platelet Count",
+                "type": "numeric",
+                "units": "10^3/µL",
+                "value": "412.0",
+                "meaning": "HIGH",
+                "reference_low": 150,
+                "reference_high": 410
+            },
+            {
+                "id": 52,
+                "parameter_name": "MPV",
+                "type": "numeric",
+                "units": "f l",
+                "value": "9.4",
+                "meaning": "NORMAL",
+                "reference_low": 6.5,
+                "reference_high": 12
+            },
+            {
+                "id": 53,
+                "parameter_name": "PDW",
+                "type": "numeric",
+                "units": "fL",
+                "value": "13.8",
+                "meaning": "NORMAL",
+                "reference_low": 9,
+                "reference_high": 17
+            },
+            {
+                "id": 54,
+                "parameter_name": "Erythrocyte Sedimentation Rate",
+                "type": "numeric",
+                "units": "mm/hr",
+                "value": "26.0",
+                "meaning": "HIGH",
+                "reference_low": 0,
+                "reference_high": 12
+            },
+            {
+                "id": 55,
+                "parameter_name": "Thyroid Stimulating Hormone - Ultrasensitive",
+                "type": "numeric",
+                "units": "µIU/ml",
+                "value": "4.527",
+                "meaning": "NORMAL",
+                "reference_low": 0.55,
+                "reference_high": 4.78
+            },
+            {
+                "id": 56,
+                "parameter_name": "Vitamin D (25-OH)",
+                "type": "numeric",
+                "units": "ng/ml",
+                "value": "11.9",
+                "meaning": "LOW",
+                "reference_low": 30,
+                "reference_high": 100
+            },
+            {
+                "id": 57,
+                "parameter_name": "Colour",
+                "type": "text",
+                "units": "",
+                "value": "Pale Yellow",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 58,
+                "parameter_name": "Appearance",
+                "type": "text",
+                "units": "",
+                "value": "Clear",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 59,
+                "parameter_name": "Specific gravity",
+                "type": "numeric",
+                "units": "",
+                "value": "1.02",
+                "meaning": "NORMAL",
+                "reference_low": 1.003,
+                "reference_high": 1.035
+            },
+            {
+                "id": 60,
+                "parameter_name": "pH",
+                "type": "numeric",
+                "units": "",
+                "value": "5.5",
+                "meaning": "NORMAL",
+                "reference_low": 4.6,
+                "reference_high": 8
+            },
+            {
+                "id": 61,
+                "parameter_name": "Glucose",
+                "type": "text",
+                "units": "",
+                "value": "Negative",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 62,
+                "parameter_name": "Protein",
+                "type": "text",
+                "units": "",
+                "value": "Negative",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 63,
+                "parameter_name": "Ketones",
+                "type": "text",
+                "units": "",
+                "value": "Negative",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 64,
+                "parameter_name": "Blood",
+                "type": "text",
+                "units": "",
+                "value": "+",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 65,
+                "parameter_name": "Bilirubin",
+                "type": "text",
+                "units": "",
+                "value": "Negative",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 66,
+                "parameter_name": "Urobilinogen",
+                "type": "text",
+                "units": "",
+                "value": "Normal",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 67,
+                "parameter_name": "Leucocyte Esterase",
+                "type": "text",
+                "units": "",
+                "value": "+++",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 68,
+                "parameter_name": "Nitrite",
+                "type": "text",
+                "units": "",
+                "value": "Negative",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 69,
+                "parameter_name": "Pus cells",
+                "type": "text",
+                "units": "/hpf",
+                "value": "20-25",
+                "meaning": "NORMAL",
+                "reference_low": 0,
+                "reference_high": 5
+            },
+            {
+                "id": 70,
+                "parameter_name": "Red Blood Cells",
+                "type": "text",
+                "units": "/hpf",
+                "value": "3-4",
+                "meaning": "NORMAL",
+                "reference_low": 0,
+                "reference_high": 2
+            },
+            {
+                "id": 71,
+                "parameter_name": "Epithelial cells",
+                "type": "text",
+                "units": "/hpf",
+                "value": "5-6",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 72,
+                "parameter_name": "Casts",
+                "type": "text",
+                "units": "/lpf",
+                "value": "Nil",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 73,
+                "parameter_name": "Crystals",
+                "type": "text",
+                "units": "",
+                "value": "Nil",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 74,
+                "parameter_name": "Yeast",
+                "type": "text",
+                "units": "",
+                "value": "Nil",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 75,
+                "parameter_name": "Bacteria",
+                "type": "text",
+                "units": "",
+                "value": "Nil",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 76,
+                "parameter_name": "Follicle Stimulating Hormone (FSH)",
+                "type": "text",
+                "units": "mIU/mL",
+                "value": "5.4",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 77,
+                "parameter_name": "Luteinizing Hormone (LH)",
+                "type": "text",
+                "units": "mIU/mL",
+                "value": "5.3",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 78,
+                "parameter_name": "Prolactin",
+                "type": "numeric",
+                "units": "ng/ml",
+                "value": "19.45",
+                "meaning": "NORMAL",
+                "reference_low": 1.8,
+                "reference_high": 29.2
+            },
+            {
+                "id": 79,
+                "parameter_name": "Vitamin B12",
+                "type": "numeric",
+                "units": "pg/ml",
+                "value": "240.0",
+                "meaning": "NORMAL",
+                "reference_low": 211,
+                "reference_high": 911
+            },
+            {
+                "id": 80,
+                "parameter_name": "Vitamin B9 (Folic Acid)",
+                "type": "text",
+                "units": "ng/ml",
+                "value": "4.75",
+                "meaning": null,
+                "reference_low": null,
+                "reference_high": null
+            },
+            {
+                "id": 81,
+                "parameter_name": "Iron Serum",
+                "type": "numeric",
+                "units": "µg/dL",
+                "value": "15.0",
+                "meaning": "LOW",
+                "reference_low": 50,
+                "reference_high": 170
+            },
+            {
+                "id": 82,
+                "parameter_name": "Total Iron Binding Capacity ( TIBC)",
+                "type": "numeric",
+                "units": "µg/dL",
+                "value": "374.0",
+                "meaning": "NORMAL",
+                "reference_low": 250,
+                "reference_high": 460
+            },
+            {
+                "id": 83,
+                "parameter_name": "Unsaturated Iron Binding Capacity",
+                "type": "numeric",
+                "units": "µg/dL",
+                "value": "359.0",
+                "meaning": "NORMAL",
+                "reference_low": 120,
+                "reference_high": 470
+            },
+            {
+                "id": 84,
+                "parameter_name": "Transferrin saturation",
+                "type": "numeric",
+                "units": "%",
+                "value": "4.01",
+                "meaning": "LOW",
+                "reference_low": 16,
+                "reference_high": 50
+            },
+            {
+                "id": 85,
+                "parameter_name": "Ferritin",
+                "type": "numeric",
+                "units": "ng/mL",
+                "value": "2.5",
+                "meaning": "LOW",
+                "reference_low": 10,
+                "reference_high": 291
+            }
+        ]
+    }
+]

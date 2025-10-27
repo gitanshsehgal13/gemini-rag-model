@@ -12,9 +12,6 @@ yarn-error.log*
 .env.production.local
 
 # Data and uploads
-data/
-uploads/
-*.json
 
 # Logs
 logs/

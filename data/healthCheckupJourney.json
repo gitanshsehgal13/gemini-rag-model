@@ -1,0 +1,188 @@
+{
+    "intent": "HEALTH_CHECKUP_BOOKING_JOURNEY",
+    "status": "active",
+    "brand_voice": {
+        "tone": "friendly, professional, health-focused",
+        "style": "conversational, reassuring, concise",
+        "persona": "Health Concierge"
+    },
+    "business_goals": [
+        "Increase annual health check-up utilization",
+        "Improve preventive health engagement",
+        "Promote continuity of care and follow-up consultation booking"
+    ],
+    "conversationFlow": {
+        "stages": [
+            {
+                "id": "greeting",
+                "name": "Initial Greeting",
+                "agent": "GreetingAgent",
+                "requiredData": [],
+                "collectData": [
+                    "initialIntent"
+                ],
+                "promptTemplate": "Greet the customer warmly. Inform them about their free annual health check-up benefit.",
+                "transitions": {
+                    "yes": "identify_member",
+                    "no": "offer_health_manager_call",
+                    "default": "identify_member"
+                }
+            },
+            {
+                "id": "identify_member",
+                "name": "Identify Family Member",
+                "agent": "DataCollectionAgent",
+                "requiredData": [
+                    "initialIntent"
+                ],
+                "collectData": [
+                    "selectedMembers"
+                ],
+                "promptTemplate": "Ask which family member would like to book the health check-up for. The customer can choose one from: Vineet (self), Punita (spouse), Aradhya (daughter), Akshat (son).",
+                "transitions": {
+                    "collected": "show_package_options",
+                    "default": "show_package_options"
+                }
+            },
+            {
+                "id": "show_package_options",
+                "name": "Show Health Check-up Package",
+                "agent": "PackageAgent",
+                "requiredData": [
+                    "initialIntent",
+                    "selectedMembers"
+                ],
+                "collectData": [
+                    "selectedPackage"
+                ],
+                "promptTemplate": "Present the recommended health check-up package based on the selected family member(s).",
+                "transitions": {
+                    "accepted": "collect_scheduling_details",
+                    "declined": "offer_health_manager_call"
+                }
+            },
+            {
+                "id": "offer_health_manager_call",
+                "name": "Offer Health Manager Call",
+                "agent": "ResponseAgent",
+                "requiredData": [],
+                "collectData": [
+                    "healthManagerCallInterest"
+                ],
+                "promptTemplate": "Offer to have a health manager call to explain the importance of health check-ups.",
+                "transitions": {
+                    "yes": "schedule_health_manager_call",
+                    "no": "close_politely"
+                }
+            },
+            {
+                "id": "schedule_health_manager_call",
+                "name": "Schedule Health Manager Call",
+                "agent": "SchedulingAgent",
+                "requiredData": [
+                    "healthManagerCallInterest"
+                ],
+                "collectData": [],
+                "promptTemplate": "Confirm that health manager will call shortly to assist with booking.",
+                "transitions": {
+                    "complete": "end"
+                }
+            },
+            {
+                "id": "collect_scheduling_details",
+                "name": "Collect Scheduling Details",
+                "agent": "SchedulingAgent",
+                "requiredData": [
+                    "selectedPackage"
+                ],
+                "collectData": [
+                    "preferredDate",
+                    "preferredTime"
+                ],
+                "promptTemplate": "Ask for preferred date and time for home sample collection. Collection method is always home sample collection - do not ask about it.",
+                "transitions": {
+                    "collected": "confirm_appointment"
+                }
+            },
+            {
+                "id": "confirm_appointment",
+                "name": "Confirm Appointment",
+                "agent": "SchedulingAgent",
+                "requiredData": [
+                    "preferredDate",
+                    "preferredTime"
+                ],
+                "collectData": [],
+                "promptTemplate": "Write a message to the customer to confirm the home sample collection appointment details.like 'Thank you, {{customerName}}. We have scheduled your home sample collection for {{date and time}} at your registered address. Our phlebotomist will arrive at your location. You can track the status of the sample collection on the APP - My Bookings section as well.'",
+                "transitions": {
+                    "complete": "schedule_reminders"
+                }
+            },
+            {
+                "id": "schedule_reminders",
+                "name": "Schedule Reminders",
+                "agent": "SchedulingAgent",
+                "requiredData": [
+                    "preferredDate",
+                    "preferredTime"
+                ],
+                "collectData": [
+                    "teleconsultationInterest"
+                ],
+                "promptTemplate": "Customer has received scheduled messages about their health checkup. Wait for their response to the teleconsultation offer.",
+                "transitions": {
+                    "yes": "teleconsultation_call",
+                    "no": "close_politely",
+                    "complete": "end"
+                }
+            },
+            {
+                "id": "teleconsultation_call",
+                "name": "Teleconsultation Call",
+                "agent": "ResponseAgent",
+                "requiredData": [
+                    "teleconsultationInterest"
+                ],
+                "collectData": [],
+                "promptTemplate": "Confirm that the teleconsultation with the doctor has been arranged. Inform the customer that the doctor will call them shortly to discuss their health checkup reports.",
+                "transitions": {
+                    "complete": "end"
+                }
+            },
+            {
+                "id": "close_politely",
+                "name": "Close Politely",
+                "agent": "ResponseAgent",
+                "requiredData": [],
+                "collectData": [],
+                "promptTemplate": "Thank them and invite to reach out if they need assistance.",
+                "transitions": {
+                    "complete": "end"
+                }
+            },
+            {
+                "id": "end",
+                "name": "Journey Complete",
+                "agent": "ResponseAgent",
+                "requiredData": [],
+                "collectData": [],
+                "promptTemplate": "The health checkup journey is complete. Thank the customer and let them know you're available if they need any assistance.",
+                "transitions": {}
+            }
+        ]
+    },
+    "recomendedAction": [
+        "App concierge detects eligible user and triggers nudge: 'Hi Good Morning{{customerName}}, your policy allows you to avail a free annual health check-up. Basis your medical details, we recommend heart, kidney and blood glucose tests. Tap here to find a nearby centre and book your appointment.'",
+        "If user says yes → send app message 'Hi {{customerName}}, your policy allows you to avail a free annual health check up. Basis your medical information, you should undergo tests to check parameters related to heart, kidney, blood glucose. I can help you look for a centre nearby and book an appointment based on your availability.'",
+        "If user clicks 'Not now' → reply 'We can have our health manager call you to explain the importance of booking these tests and clear any hesitation you may have. Should we have them call you up?'",
+        "If user replies 'Yes' → reply 'Got it, our health manager will call you shortly to assist you with booking and test selection.'",
+        "If user replies 'No' → reply 'No worries, {{customerName}}. Please feel free to schedule your health check-up later from the app whenever you're ready. Stay healthy!'",
+        "If user says yes : Show customer the plan with details like we recommend you this package. Ask customer for go-ahead for this plan. Reply like 'Perfect {{customerName}},you have chosen test package {{packageName}}.'",
+        "Ask: 'Please share your preferred date and time for home sample collection.If user provides date and time → reply 'Thank you, {{customerName}}. We have scheduled your home sample collection for {{date and time}} at your registered address. Our phlebotomist will arrive at your location. You can track the status of the sample collection on the app as well.",
+        "Schedule reminder: 'Kindly remember Fast for 12 hours (only water allowed).Drink only plain water during the fasting period — avoid tea, coffee, or juice. Do not consume alcohol or smoke for at least 24 hours before sample collection.'",
+        "After check-up completion (next day evening): 'Hello {{customerName}}, hope your health check-up went smoothly. You'll receive your reports within the next 12 hours. You can track the status of the sample collection on the app as well.'",
+        "Schedule reminder: Hello {{customerName}}, your health check-up reports are now ready! You can view and download them anytime from the \"My Bookings\" section in your app. Do you'd like the in-house doctor to review your reports and discuss the results?",
+        "If user replies 'Yes' → reply 'Perfect. The doctor will call you as scheduled. Please keep your reports handy during the discussion.'",
+        "Schedule reminder:Once doctor call completed 'Hello {{customerName}}, hope your call with the doctor went well. Please follow the tips shared. You'll receive your prescription, call summary, and diet plan on the app shortly. Your health check-up journey is now complete and your records have been updated. Stay healthy and take care!'"
+    ]
+}

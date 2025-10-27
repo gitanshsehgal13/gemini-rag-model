@@ -1,0 +1,62 @@
+{
+  "9830323302": {
+    "journeyId": "NEW_CUSTOMER_ONBOARDING",
+    "journeyName": "Newly Onboarded Customer Journey",
+    "customerId": "9830323302",
+    "status": "active",
+    "currentEventId": "JOURNEY_COMPLETE",
+    "completedEvents": [
+      "WELCOME_EXPERIENCE_INITIATED",
+      "POLICY_COVERAGE_VIEWED",
+      "FAMILIARITY_BUILDING_INITIATED",
+      "HEALTH_PROFILE_SURVEY",
+      "HEALTH_PROFILE_COMPLETED",
+      "FAMILY_MAPPING_PROMPT",
+      "FAMILY_MEMBER_ADDED",
+      "EXTENDED_FAMILY_MAP_CREATED"
+    ],
+    "userData": {
+      "healthProfile": {
+        "rawResponse": "I am on BP medication and taking thyroid tablets",
+        "timestamp": "2025-10-08T15:31:04.189Z",
+        "conditions": [
+          "Hypertension",
+          "Thyroid"
+        ],
+        "familyRole": "self"
+      },
+      "familyMembers": [
+        {
+          "name": "Father",
+          "age": 65,
+          "conditions": [
+            "Diabetes"
+          ]
+        },
+        {
+          "name": "Mother",
+          "age": 62,
+          "conditions": [
+            "Hypertension"
+          ]
+        }
+      ]
+    },
+    "surveyResponses": {
+      "rawResponse": "I am on BP medication and taking thyroid tablets",
+      "timestamp": "2025-10-08T15:31:04.189Z",
+      "conditions": [
+        "Hypertension",
+        "Thyroid"
+      ],
+      "familyRole": "self"
+    },
+    "startedAt": "2025-10-08T15:30:54.136Z",
+    "lastUpdatedAt": "2025-10-08T15:31:13.246Z",
+    "policyData": {
+      "policyNumber": "7000170537-02",
+      "policyholderName": "Vineet Singh",
+      "policyType": "TATA AIG MediCare Premier"
+    }
+  }
+}

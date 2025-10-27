@@ -1,0 +1,1007 @@
+[
+  {
+    "rohini": "8900080351592",
+    "hospitalName": "Seven Star Multispeciality Hospital & Res Centre",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "Surbhi House, Dimple Arcade, , Behind Sai Dham, Thakur Complex, Kandivail (E)",
+    "pincode": "400101",
+    "networkType": "Excluded",
+    "departments": [
+      "General Medicine",
+      "Gastroenterology",
+      "Neurosurgery",
+      "Endocrinology",
+      "Urology",
+      "Nephrology",
+      "Pulmonology",
+      "Dermatology",
+      "Hematology",
+      "Rheumatology",
+      "Vascular Surgery",
+      "Neuro Medicine",
+      "General Surgery",
+      "ENT",
+      "Orthopedics",
+      "Obstetrics and Gynecology",
+      "Oral and Maxillofacial Surgery",
+      "Pediatrics",
+      "Geriatrics",
+      "Hepatology",
+      "Neonatology",
+      "Reproductive Medicine",
+      "Accidental Care",
+      "Medical Oncology",
+      "Surgical Oncology",
+      "Radiation Therapy"
+    ]
+  },
+  {
+    "rohini": "8900080108646",
+    "latitude": "19.054902347538466",
+    "longitude": "72.8884048877909",
+    "hospitalName": "Swastik Hospital And Research Centre (Managed By Rajdham Healthcare)",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "Plot No: 22, Swastik Park, Chembur",
+    "pincode": "400071 ",
+    "networkType": "Open",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8884048877909,
+        19.0549023475385
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Cardiology",
+      "Neuro Medicine",
+      "Neurosurgery",
+      "Gastroenterology",
+      "Urology",
+      "Nephrology",
+      "Pulmonology",
+      "Hematology",
+      "Vascular Surgery",
+      "ENT",
+      "Orthopedics",
+      "Obstetrics and Gynecology",
+      "Dermatology",
+      "Pediatrics",
+      "Surgical Oncology",
+      "Medical Oncology",
+      "Burn Isolation Unit",
+      "Accidental Care",
+      "Bariatric Surgery"
+    ]
+  },
+  {
+    "rohini": "8900080436824",
+    "latitude": "19.1510653",
+    "longitude": "72.933451884",
+    "hospitalName": "Bhalanetra Superspeciality Eye Hospital",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "Shop No: 5-8, Sachdeva complex, Jangal Mangal Rd, Battipada, Bhandup West",
+    "pincode": "400078",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.933451884,
+        19.1510653
+      ]
+    },
+    "departments": [
+      "Ophthalmology"
+    ]
+  },
+  {
+    "rohini": "8900080389335",
+    "latitude": "19.2547266",
+    "longitude": "72.86226928",
+    "hospitalName": "Pragati Multispeciality Hospital",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "Sai Vaibhav Building, 1St Floor, Ramkuvar Thakur Road, Dahisar East",
+    "pincode": "400068",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.86226928,
+        19.2547266
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Neurosurgery",
+      "Gastroenterology",
+      "Urology",
+      "Nephrology",
+      "Pulmonology",
+      "Hematology",
+      "Vascular Surgery",
+      "ENT",
+      "Orthopedics",
+      "Obstetrics and Gynecology",
+      "Oral and Maxillofacial Surgery",
+      "Pediatrics",
+      "Geriatrics",
+      "Accidental Care",
+      "Medical Oncology",
+      "Surgical Oncology"
+    ]
+  },
+  {
+    "rohini": "8900080581593",
+    "latitude": "19.18809619",
+    "longitude": "72.8591735377",
+    "hospitalName": "Mauli Aarogyam Multi Speciality Hospital",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "1-A, Ground Floor & 1St Floor, Mauli Pride Bldg, Beside W Exp Highway, Ambewadi Kurar Village, Malad East",
+    "pincode": "400097",
+    "networkType": "Open",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8591735377,
+        19.18809619
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Cardiology",
+      "Neuro Medicine",
+      "Neurosurgery",
+      "Gastroenterology",
+      "Endocrinology",
+      "Urology",
+      "Nephrology",
+      "Pulmonology",
+      "Dermatology",
+      "Hematology",
+      "Rheumatology",
+      "Vascular Surgery",
+      "ENT",
+      "Orthopedics",
+      "Obstetrics and Gynecology",
+      "Oral and Maxillofacial Surgery",
+      "Pediatrics",
+      "Pediatric Cardiology",
+      "Geriatrics",
+      "Hepatology",
+      "Neonatology",
+      "Reproductive Medicine",
+      "Transplant Surgery",
+      "Bariatric Surgery",
+      "Accidental Care",
+      "Medical Oncology",
+      "Surgical Oncology",
+      "Radiation Therapy"
+    ]
+  },
+  {
+    "rohini": "8900080390164",
+    "latitude": "19.0455512",
+    "longitude": "72.841579",
+    "hospitalName": "Lion Tarachand Bapa Hospital & Research Centre",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "Jain Society, Lion Tarachand Bapa Marg, Sion West",
+    "pincode": "400022",
+    "networkType": "Open",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.841579,
+        19.0455512
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Cardiology",
+      "CTVS",
+      "Neuro Medicine",
+      "Neurosurgery",
+      "Gastroenterology",
+      "Endocrinology",
+      "Urology",
+      "Nephrology",
+      "Pulmonology",
+      "Dermatology",
+      "Hematology",
+      "Rheumatology",
+      "Ophthalmology",
+      "Vascular Surgery",
+      "ENT",
+      "Orthopedics",
+      "Obstetrics and Gynecology",
+      "Dental",
+      "Oral and Maxillofacial Surgery",
+      "Pediatrics",
+      "Pediatric Cardiology",
+      "Geriatrics",
+      "Hepatology",
+      "Neonatology",
+      "Reproductive Medicine",
+      "Transplant Surgery",
+      "Bariatric Surgery",
+      "Accidental Care",
+      "Medical Oncology",
+      "Surgical Oncology"
+    ]
+  },
+  {
+    "rohini": "8900080107366",
+    "latitude": "19.2080066",
+    "longitude": "72.8365312",
+    "hospitalName": "Parvatibai Chavan Charitable Trust",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "Yashwant Building, Datta Mandir Road, Off MG Road, Dahanukar Wadi, Kandivali West",
+    "pincode": "400067",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8365312,
+        19.2080066
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Cardiology",
+      "Neuro Medicine",
+      "Neurosurgery",
+      "Gastroenterology",
+      "Endocrinology",
+      "Urology",
+      "Nephrology",
+      "Pulmonology",
+      "Dermatology",
+      "Hematology",
+      "Vascular Surgery",
+      "Ophthalmology",
+      "ENT",
+      "Orthopedics",
+      "Obstetrics and Gynecology",
+      "Dental",
+      "Pediatrics",
+      "Neonatology",
+      "Reproductive Medicine",
+      "Accidental Care",
+      "Medical Oncology",
+      "Surgical Oncology",
+      "Radiation Therapy"
+    ]
+  },
+  {
+    "rohini": "8900080325746",
+    "latitude": "19.0760325",
+    "longitude": "72.9033247",
+    "hospitalName": "Eye Essentials",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "201, Interlink House, Above Tanishq, Near Satyam Shopping Center,\r\nM G Road, Ghatkopar East",
+    "pincode": "400077",
+    "networkType": "Open",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.9033247,
+        19.0760325
+      ]
+    },
+    "departments": [
+      "Ophthalmology",
+      "Pulmonology"
+    ]
+  },
+  {
+    "rohini": "8900080106918",
+    "latitude": "19.2293458",
+    "longitude": "72.8628288",
+    "hospitalName": "Narendra Hospital",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "Seeta Mahal Building, Kasturba Road No: 5, Greens Hotel, Borivali East",
+    "pincode": "400066",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8628288,
+        19.2293458
+      ]
+    },
+    "departments": [
+      "General Medicine"
+    ]
+  },
+  {
+    "rohini": "8900080459311",
+    "latitude": "19.0928944",
+    "longitude": "72.9036769",
+    "hospitalName": "Vedant Central Hospital (Run By Pasaydan Charitable Foundation)",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "Pasaydan Bhavan, RB Kadam Marg, Wagadwala, Next To Jeevdaya Lane, Jain Mandir, Near Jagruti Nagar Metro Station, Ghatkopar West",
+    "pincode": "400084",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.9036769,
+        19.0928944
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Cardiology",
+      "Neuro Medicine",
+      "CTVS",
+      "Neurosurgery",
+      "Gastroenterology",
+      "Endocrinology",
+      "Urology",
+      "Nephrology",
+      "Pulmonology",
+      "Hematology",
+      "Dermatology",
+      "Rheumatology",
+      "Vascular Surgery",
+      "Ophthalmology",
+      "ENT",
+      "Orthopedics",
+      "Obstetrics and Gynecology",
+      "Dental",
+      "Oral and Maxillofacial Surgery",
+      "Pediatrics",
+      "Accidental Care",
+      "Burn Isolation Unit",
+      "Medical Oncology",
+      "Surgical Oncology",
+      "Radiation Therapy"
+    ]
+  },
+  {
+    "rohini": "8900080381605",
+    "latitude": "19.0551695",
+    "longitude": "72.8299518",
+    "hospitalName": "Shanti Nursing Home & Multispeciality Hospital",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "1St Floor, Blue Flame Apt, Above Kondor Interiors, Opp Jama Masjid, SV Road, Bandra West",
+    "pincode": "400050",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8299518,
+        19.0551695
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Cardiology",
+      "Neuro Medicine",
+      "Neurosurgery",
+      "Gastroenterology",
+      "Urology",
+      "Nephrology",
+      "Dermatology",
+      "ENT",
+      "Orthopedics",
+      "Obstetrics and Gynecology",
+      "Pediatrics",
+      "Accidental Care",
+      "Medical Oncology",
+      "Surgical Oncology",
+      "Hematology"
+    ]
+  },
+  {
+    "rohini": "8900080112049",
+    "latitude": "19.0717612",
+    "longitude": "72.8615426",
+    "hospitalName": "Niron Hospital & Research Centre Pvt Ltd",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "Kadam Wadi, Opp: ST Anthony Street, Santacruz East",
+    "pincode": "400098",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8615426,
+        19.0717612
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Neuro Medicine",
+      "Medical Oncology",
+      "Pediatrics",
+      "Obstetrics and Gynecology",
+      "Orthopedics",
+      "Cardiology",
+      "ENT",
+      "Nephrology",
+      "Urology"
+    ]
+  },
+  {
+    "rohini": "8900080504141",
+    "latitude": "19.047926014564666",
+    "longitude": "72.85775997843255",
+    "hospitalName": "Life Care Hospital",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "B 102/9, 1St Floor, Priyadarshini CHS, Opp: New ONGC Tower, Sion Bandra Link Road, Dharavi",
+    "pincode": "400017",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8577599784326,
+        19.0479260145647
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Cardiology",
+      "Gastroenterology",
+      "Neurosurgery",
+      "Endocrinology",
+      "Urology",
+      "Nephrology",
+      "Pulmonology",
+      "Hematology",
+      "Dermatology",
+      "Rheumatology",
+      "Ophthalmology",
+      "ENT",
+      "Orthopedics",
+      "Dental",
+      "Pediatrics",
+      "Medical Oncology",
+      "Surgical Oncology"
+    ]
+  },
+  {
+    "rohini": "8900080288973",
+    "latitude": "19.1999835478904",
+    "longitude": "72.8458679349909",
+    "hospitalName": "Shree Krishna Hospital",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "Ground Floor, Shiv Kripa CHS, SVP Lane, Ram Gully, Kandivali West",
+    "pincode": "400067",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8458679349909,
+        19.1999835478904
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Neuro Medicine",
+      "Pediatrics",
+      "Medical Oncology",
+      "Orthopedics",
+      "ENT",
+      "Dermatology",
+      "Pulmonology",
+      "Nephrology",
+      "Cardiology",
+      "Obstetrics and Gynecology"
+    ]
+  },
+  {
+    "rohini": "8900080501171",
+    "latitude": "19.246372399628672",
+    "longitude": "72.86055540696647",
+    "hospitalName": "Navneet Hospital",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "Opp: Manav Kalyan Kendra Chowk, SV Road, Dahisar East",
+    "pincode": "400068",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8605554069665,
+        19.2463723996287
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Cardiology",
+      "Surgical Oncology",
+      "Medical Oncology",
+      "Accidental Care",
+      "Pediatrics",
+      "Pediatric Cardiology",
+      "Geriatrics",
+      "Hepatology",
+      "Neonatology",
+      "Reproductive Medicine",
+      "Dental",
+      "Obstetrics and Gynecology",
+      "Orthopedics",
+      "ENT",
+      "Ophthalmology",
+      "Vascular Surgery",
+      "Rheumatology",
+      "Hematology",
+      "Dermatology",
+      "Pulmonology",
+      "Nephrology",
+      "Urology",
+      "Endocrinology",
+      "Gastroenterology",
+      "Neurosurgery"
+    ]
+  },
+  {
+    "rohini": "8900080108936",
+    "latitude": "19.1254172",
+    "longitude": "72.9170023",
+    "hospitalName": "Powai Polyclinic & Hospital",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "19th A Road, Opp IIT Main Gate Village, Tirandaz, Powai",
+    "pincode": "400076",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.9170023,
+        19.1254172
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Cardiology",
+      "CTVS",
+      "Neuro Medicine",
+      "Gastroenterology",
+      "Urology",
+      "Nephrology",
+      "Pulmonology",
+      "Dermatology",
+      "Hematology",
+      "Vascular Surgery",
+      "Ophthalmology",
+      "ENT",
+      "Obstetrics and Gynecology",
+      "Dental",
+      "Oral and Maxillofacial Surgery",
+      "Pediatrics",
+      "Accidental Care",
+      "Burn Isolation Unit",
+      "Medical Oncology",
+      "Surgical Oncology",
+      "Radiation Therapy"
+    ]
+  },
+  {
+    "rohini": "8900080106925",
+    "latitude": "19.2240612",
+    "longitude": "72.8666469",
+    "hospitalName": "National Hospital",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "1St Floor, Matruashish Building, Next To Madhav Hall, Mahatma Gandhi Road, Borivali East",
+    "pincode": "400066",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8666469,
+        19.2240612
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Cardiology",
+      "Neuro Medicine",
+      "Neurosurgery",
+      "Gastroenterology",
+      "Endocrinology",
+      "Urology",
+      "Nephrology",
+      "Pulmonology",
+      "Dermatology",
+      "Hematology",
+      "Rheumatology",
+      "ENT",
+      "Orthopedics",
+      "Obstetrics and Gynecology",
+      "Oral and Maxillofacial Surgery",
+      "Geriatrics",
+      "Bariatric Surgery",
+      "Surgical Oncology"
+    ]
+  },
+  {
+    "rohini": "8900080325692",
+    "latitude": "19.1292452",
+    "longitude": "72.836039",
+    "hospitalName": "Suman Eye Clinic & Surgery Centre LLP",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "B/103, Suman Apartments, 3rd Cross Lane, Lokahandwala Complex, Andheri West",
+    "pincode": "400053",
+    "networkType": "Open",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.836039,
+        19.1292452
+      ]
+    },
+    "departments": [
+      "Ophthalmology"
+    ]
+  },
+  {
+    "rohini": "8900080110472",
+    "latitude": "19.091182",
+    "longitude": "72.9208636",
+    "hospitalName": "Ruby Medical Centre",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "283/363-A, 353 Bus Route, 90 Feet Road, Tagore Nagar, Vikhroli East",
+    "pincode": "400083",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.9208636,
+        19.091182
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Cardiology",
+      "Neuro Medicine",
+      "Gastroenterology",
+      "Urology",
+      "Dermatology",
+      "Hematology",
+      "Rheumatology",
+      "Vascular Surgery",
+      "Ophthalmology",
+      "ENT",
+      "Orthopedics",
+      "Obstetrics and Gynecology",
+      "Pediatrics",
+      "Geriatrics",
+      "Neonatology",
+      "Accidental Care",
+      "Burn Isolation Unit",
+      "Medical Oncology",
+      "Surgical Oncology"
+    ]
+  },
+  {
+    "rohini": "8900080105287",
+    "latitude": "19.1227346",
+    "longitude": "72.8302013",
+    "hospitalName": "Aastha Nursing Home",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "126, JP Road, Fish Market Area, Navneeth Colony, Andheri West",
+    "pincode": "400058",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8302013,
+        19.1227346
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Neuro Medicine",
+      "Gastroenterology",
+      "Urology",
+      "Pulmonology",
+      "Dermatology",
+      "Hematology",
+      "Vascular Surgery",
+      "ENT",
+      "Orthopedics",
+      "Obstetrics and Gynecology",
+      "Oral and Maxillofacial Surgery",
+      "Pediatrics",
+      "Geriatrics",
+      "Medical Oncology",
+      "Surgical Oncology",
+      "Accidental Care"
+    ]
+  },
+  {
+    "rohini": "8900080109391",
+    "latitude": "19.1514337285538",
+    "longitude": "72.9337252233461",
+    "hospitalName": "Dr Malwankars Romeen Nursing Home",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "Ground Floor, Gautam Dham Building, Opp Gama House, Gamdevi Road, Bhandup West",
+    "pincode": "400078",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.9337252233461,
+        19.1514337285538
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Neuro Medicine",
+      "Gastroenterology",
+      "Urology",
+      "Nephrology",
+      "Pulmonology",
+      "Orthopedics",
+      "Pediatrics"
+    ]
+  },
+  {
+    "rohini": "8900080104488",
+    "latitude": "19.2114533",
+    "longitude": "72.8737217",
+    "hospitalName": "Shreeji Hospital",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "103, Raj Tower, Lokhandwala Complex, Next to Alika Nagar, Akruli Road, Mhada Colony, Kandivali East",
+    "pincode": "400101",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8737217,
+        19.2114533
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Gastroenterology",
+      "Urology",
+      "ENT",
+      "Orthopedics",
+      "Obstetrics and Gynecology",
+      "Accidental Care",
+      "Surgical Oncology",
+      "Medical Oncology"
+    ]
+  },
+  {
+    "rohini": "8900080112261",
+    "latitude": "19.227057747119",
+    "longitude": "72.8677839861346",
+    "hospitalName": "Shree Sai Hospital (ICCU & Trauma Unit)",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "Gokul Nagar No 1, Near Sai Dham Temple, Westran Express Highway, Kandivali East",
+    "pincode": "400101",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8677839861346,
+        19.227057747119
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Cardiology",
+      "Neuro Medicine",
+      "Neurosurgery",
+      "Gastroenterology",
+      "Endocrinology",
+      "Urology",
+      "Nephrology",
+      "Pulmonology",
+      "Dermatology",
+      "Hematology",
+      "Rheumatology",
+      "Ophthalmology",
+      "ENT",
+      "Orthopedics",
+      "Obstetrics and Gynecology",
+      "Pediatrics",
+      "Accidental Care",
+      "Burn Isolation Unit",
+      "Medical Oncology"
+    ]
+  },
+  {
+    "rohini": "8900080103115",
+    "latitude": "19.0177901894008",
+    "longitude": "72.8332087022957",
+    "hospitalName": "Dr Gandhi`S Nursing Home Pvt Ltd",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "101/102/202, Mangal Multi Chs, SK Bole Road, Agar Bazar, Near Raheja Princess, Dadar West",
+    "pincode": "400028",
+    "networkType": "Open",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8332087022957,
+        19.0177901894008
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Gastroenterology",
+      "Urology",
+      "Endocrinology",
+      "ENT",
+      "Orthopedics",
+      "Obstetrics and Gynecology",
+      "Pediatrics",
+      "Bariatric Surgery",
+      "Surgical Oncology",
+      "Medical Oncology",
+      "Burn Isolation Unit",
+      "Accidental Care"
+    ]
+  },
+  {
+    "rohini": "8900080106123",
+    "latitude": "19.1902523640741",
+    "longitude": "72.8465531963611",
+    "hospitalName": "Agrawal Eye Hospital",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "1St Floor, Maharaja Apartments, Opp Telephone Exchange, SV Road, Malad West, Malad",
+    "pincode": "400064",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8465531963611,
+        19.1902523640741
+      ]
+    },
+    "departments": [
+      "Ophthalmology",
+      "General Surgery"
+    ]
+  },
+  {
+    "rohini": "8900080111738",
+    "latitude": "19.1229428",
+    "longitude": "72.8641927",
+    "hospitalName": "Holy Spirit Hospital",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "Mahakali Caves Road, Andheri East",
+    "pincode": "400093",
+    "networkType": "Open",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8641927,
+        19.1229428
+      ]
+    },
+    "departments": [
+      "General Medicine",
+      "General Surgery",
+      "Cardiology",
+      "CTVS",
+      "Neuro Medicine",
+      "Neurosurgery",
+      "Gastroenterology",
+      "Endocrinology",
+      "Urology",
+      "Nephrology",
+      "Pulmonology",
+      "Dermatology",
+      "Hematology",
+      "Rheumatology",
+      "Vascular Surgery",
+      "Ophthalmology",
+      "ENT",
+      "Orthopedics",
+      "Obstetrics and Gynecology",
+      "Dental",
+      "Oral and Maxillofacial Surgery",
+      "Pediatrics",
+      "Pediatric Cardiology",
+      "Geriatrics",
+      "Hepatology",
+      "Neonatology",
+      "Reproductive Medicine",
+      "Accidental Care",
+      "Medical Oncology",
+      "Surgical Oncology",
+      "Radiation Therapy"
+    ]
+  },
+  {
+    "rohini": "8900080106352",
+    "latitude": "19.1752299202594",
+    "longitude": "72.8460398368398",
+    "hospitalName": "Maa Nursing Home & Netra Jyoti Eyecare Centre",
+    "zone": "West",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "hospitalAddress": "Himachal Building, S V Road, Goregaon",
+    "pincode": "400064",
+    "networkType": "Valued",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        72.8460398368398,
+        19.1752299202594
+      ]
+    },
+    "departments": [
+      "General Surgery",
+      "Ophthalmology",
+      "ENT",
+      "Obstetrics and Gynecology",
+      "Pediatrics",
+      "General Medicine",
+      "Gastroenterology",
+      "Dermatology"
+    ]
+  }
+]

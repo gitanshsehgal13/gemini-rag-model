@@ -1,0 +1,128 @@
+{
+
+    "name" : "HEALTH_CLAIM_DOCUMENT_LIST",
+    "documentList" : [ 
+        {
+            "DocumentCategory" : "Claim Form_Related documents",
+            "customerDocumentCategory" : "Claim Related Documents",
+            "documents" : [ 
+                {
+                    "DocumentName" : "Claim Form",
+                    "customerDocumentName" : "Claim Form",
+                    "isMandatory" : true
+                }, 
+                {
+                    "DocumentName" : "Pre Auth Form",
+                    "customerDocumentName" : "Pre Auth Form",
+                    "isMandatory" : false
+                }, 
+                {
+                    "DocumentName" : "Health ID card",
+                    "customerDocumentName" : "Health Card",
+                    "isMandatory" : true
+                }
+            ]
+        }, 
+        {
+            "DocumentCategory" : "Discharge Summary_Medical Bills",
+            "customerDocumentCategory" : "Documents Collected from Hospital",
+            "documents" : [ 
+                {
+                    "DocumentName" : "Discharge Card",
+                    "customerDocumentName" : "Discharge Summary",
+                    "isMandatory" : true
+                }, 
+                {
+                    "DocumentName" : "Final Bill",
+                    "customerDocumentName" : "Final Bill",
+                    "isMandatory" : true
+                }, 
+                {
+                    "DocumentName" : "Pharmacy Bills",
+                    "customerDocumentName" : "Pharmacy Bills",
+                    "isMandatory" : false
+                }, 
+                {
+                    "DocumentName" : "Paid Receipt",
+                    "customerDocumentName" : "All Paid Receipt",
+                    "isMandatory" : true
+                }
+            ]
+        }, 
+        {
+            "DocumentCategory" : "Medical Reports",
+            "customerDocumentCategory" : "Medical Reports",
+            "documents" : [ 
+                {
+                    "DocumentName" : "Medical Reports",
+                    "customerDocumentName" : "Medical Reports (Lab / Radiology reports)",
+                    "isMandatory" : false
+                }, 
+                {
+                    "DocumentName" : "Consultation Papers_ICP",
+                    "customerDocumentName" : "Consultation Papers/ ICP",
+                    "isMandatory" : false
+                }, 
+                {
+                    "DocumentName" : "FIR_MLC copy",
+                    "customerDocumentName" : "A copy of FIR/MLC",
+                    "isMandatory" : false
+                }
+            ]
+        }, 
+        {
+            "DocumentCategory" : "Cheque_AML_CKYC_BankDetails",
+            "customerDocumentCategory" : "ID related/ FInancial Documents",
+            "documents" : [ 
+                {
+                    "DocumentName" : "NEFT_Cancelled Cheque_other NEFT document",
+                    "customerDocumentName" : "NEFT-Cancelled Cheque/other NEFT document",
+                    "isMandatory" : true
+                }, 
+                {
+                    "DocumentName" : "CKYC_CKYC Form",
+                    "customerDocumentName" : "cKYC Form",
+                    "isMandatory" : false
+                }, 
+                {
+                    "DocumentName" : "CKYC_ID Proof",
+                    "customerDocumentName" : "ID Proof",
+                    "isMandatory" : false
+                }, 
+                {
+                    "DocumentName" : "CKYC_Address Proof",
+                    "customerDocumentName" : "Address Proof",
+                    "isMandatory" : false
+                }
+            ]
+        }, 
+        {
+            "DocumentCategory" : "Investigation reports",
+            "customerDocumentCategory" : "Investigation reports",
+            "documents" : [ 
+                {
+                    "DocumentName" : "Verification Report",
+                    "customerDocumentName" : "Verification Report (Case investigation / field verification related)",
+                    "isMandatory" : false
+                }, 
+                {
+                    "DocumentName" : "Legal_Litigation",
+                    "customerDocumentName" : "Legal/ Litigation",
+                    "isMandatory" : false
+                }
+            ]
+        }, 
+        {
+            "DocumentCategory" : "Others",
+            "customerDocumentCategory" : "Others",
+            "documents" : [ 
+                {
+                    "DocumentName" : "Other",
+                    "customerDocumentName" : "Other Documents",
+                    "isMandatory" : false
+                }
+            ]
+        }
+    ],
+    "isActive" : true
+}
