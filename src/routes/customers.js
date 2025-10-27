@@ -381,20 +381,8 @@ router.get('/:customerId/suggested-questions', async (req, res) => {
  */
 router.get('/:customerId/policy-timeline', async (req, res) => {
   try {
-    const fs = require('fs');
-    const path = require('path');
-    
-    const timelineFilePath = path.join(__dirname, '../../data/policyTimeline.json');
-    
-    // Check if file exists
-    if (!fs.existsSync(timelineFilePath)) {
-      return res.status(404).json({
-        error: 'Policy timeline data not found'
-      });
-    }
-    
-    // Read and parse the timeline data
-    const timelineData = JSON.parse(fs.readFileSync(timelineFilePath, 'utf8'));
+    // Require the JavaScript module (not JSON)
+    const timelineData = require('../../data/policyTimeline.js');
     
     res.json({
       customerId: req.params.customerId,
