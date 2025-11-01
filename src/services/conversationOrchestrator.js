@@ -8,7 +8,7 @@ class ConversationOrchestrator {
         this.intentConfig = intentConfig;
         this.conversationFlow = intentConfig.conversationFlow;
         this.stages = new Map();
-        
+
         // Index stages by ID for quick lookup
         this.conversationFlow.stages.forEach(stage => {
             this.stages.set(stage.id, stage);
@@ -37,18 +37,18 @@ class ConversationOrchestrator {
      */
     getCurrentStage(conversationState) {
         const { currentStageId, collectedData } = conversationState;
-        
+
         // If no stage set, start with first stage
         if (!currentStageId) {
             return this.stages.get('greeting');
         }
-        
+
         const currentStage = this.stages.get(currentStageId);
         if (!currentStage) {
             console.error(`Stage not found: ${currentStageId}`);
             return this.stages.get('greeting');
         }
-        
+
         return currentStage;
     }
 
@@ -61,10 +61,10 @@ class ConversationOrchestrator {
      */
     determineNextStage(currentStage, collectedData, userResponse) {
         const transitions = currentStage.transitions;
-        
+
         // Check if all required data for current stage is collected
         const isDataComplete = this.isStageDataComplete(currentStage, collectedData);
-        
+
         // Stage-specific logic
         switch (currentStage.id) {
             case 'greeting':
@@ -73,32 +73,43 @@ class ConversationOrchestrator {
                     return transitions.no;
                 }
                 return transitions.yes || transitions.default;
-            
+
             case 'identify_patient':
                 if (collectedData.patientRelation) {
                     return transitions.collected;
                 }
                 return currentStage.id; // Stay in same stage
-            
+
             case 'medical_reason':
                 if (collectedData.medicalReason) {
                     return transitions.collected;
                 }
                 return currentStage.id;
-            
+
+            case 'confirm_addmission_teleconsultation':
+                // Decide path: admission flow vs teleconsultation flow
+                if (userResponse.toLowerCase().includes('admission')) {
+                    collectedData.addmissionProcessInterest = 'yes';
+                    return transitions.yes || currentStage.id;
+                } else if (userResponse.toLowerCase().includes('consultation') || userResponse.toLowerCase().includes('doctor')) {
+                    collectedData.addmissionProcessInterest = 'no';
+                    return transitions.no || currentStage.id;
+                }
+                return currentStage.id;
+
             case 'show_hospitals':
                 // If hospital is selected, skip await_hospital_selection and go to confirm_admission
                 if (collectedData.selectedHospital) {
                     return transitions.selected || transitions.shown;
                 }
                 return transitions.shown; // Move to await_hospital_selection
-            
+
             case 'await_hospital_selection':
                 if (collectedData.selectedHospital) {
                     return transitions.collected;
                 }
                 return currentStage.id;
-            
+
             case 'confirm_admission':
                 if (collectedData.admissionConfirmed === true) {
                     return transitions.yes;
@@ -106,24 +117,24 @@ class ConversationOrchestrator {
                     return transitions.no;
                 }
                 return currentStage.id;
-            
+
             case 'collect_admission_details':
                 const hasCost = !!collectedData.estimatedCost;
                 const hasDate = !!collectedData.admissionDate;
-                
+
                 if (hasCost && hasDate) {
                     return transitions.complete;
                 } else if (hasCost || hasDate) {
                     return transitions.partial; // Partial data, stay in stage
                 }
                 return currentStage.id;
-            
+
             case 'collect_preferences':
                 if (collectedData.preferences || this.isSkipResponse(userResponse)) {
                     return transitions.collected || transitions.skipped;
                 }
                 return currentStage.id;
-            
+
             case 'initiate_claim':
                 if (collectedData.intimationId) {
                     return transitions.success;
@@ -131,34 +142,47 @@ class ConversationOrchestrator {
                     return transitions.failure;
                 }
                 return currentStage.id;
-            
+
             case 'schedule_followups':
                 return transitions.complete; // Always complete
-            
+
             case 'teleconsultation_response':
                 if (collectedData.teleconsultationInterest === 'yes') {
                     return transitions.yes;
                 } else if (collectedData.teleconsultationInterest === 'no') {
                     return transitions.no;
                 }
+                // If not set in collectedData, check user response directly (case-insensitive)
+                const userResponseLower = (userResponse || '').toLowerCase();
+                if (this.isPositiveResponse(userResponseLower)) {
+                    collectedData.teleconsultationInterest = 'yes';
+                    return transitions.yes;
+                } else if (this.isNegativeResponse(userResponseLower)) {
+                    collectedData.teleconsultationInterest = 'no';
+                    return transitions.no;
+                }
                 return currentStage.id;
-            
+
             case 'collect_consultation_preferences':
                 const hasConsultationDate = !!collectedData.consultationDate;
                 const hasConsultationTime = !!collectedData.consultationTime;
-                
+
                 if (hasConsultationDate && hasConsultationTime) {
                     return transitions.collected;
                 }
                 return currentStage.id;
-            
+
             case 'confirm_consultation':
                 return transitions.complete; // Always complete
-            
+
             case 'admission_confirmed':
             case 'close_politely':
-                return 'end';
-            
+                if (userResponse.toLowerCase().includes('admission')) {
+                    return transitions.initialIntent;
+                } else {
+                    return 'end';
+                }
+
             default:
                 return currentStage.id;
         }
@@ -194,14 +218,14 @@ class ConversationOrchestrator {
     extractDataFromMessage(stage, userMessage, existingData) {
         const extracted = {};
         const messageLower = userMessage.toLowerCase();
-        
+
         // Extract based on what this stage collects
         stage.collectData.forEach(dataKey => {
             switch (dataKey) {
                 case 'initialIntent':
                     extracted.initialIntent = true; // User started conversation
                     break;
-                
+
                 case 'patientRelation':
                     if (messageLower.includes('my wife') || messageLower.includes('wife')) {
                         extracted.patientRelation = 'Spouse';
@@ -213,13 +237,13 @@ class ConversationOrchestrator {
                         extracted.patientRelation = 'Self';
                     }
                     break;
-                
+
                 case 'medicalReason':
                     if (userMessage && !existingData.medicalReason) {
                         extracted.medicalReason = userMessage;
                     }
                     break;
-                
+
                 case 'location':
                     // Extract location if mentioned
                     const locationKeywords = ['in ', 'at ', 'near ', 'around '];
@@ -232,7 +256,7 @@ class ConversationOrchestrator {
                         }
                     });
                     break;
-                
+
                 case 'selectedHospital':
                     // Match against the shown hospitals using token-overlap scoring
                     if (existingData.hospitalSearchResults && existingData.hospitalSearchResults.length > 0) {
@@ -269,7 +293,7 @@ class ConversationOrchestrator {
                         extracted.selectedHospital = userMessage;
                     }
                     break;
-                
+
                 case 'admissionConfirmed':
                     if (this.isPositiveResponse(messageLower)) {
                         extracted.admissionConfirmed = true;
@@ -277,14 +301,14 @@ class ConversationOrchestrator {
                         extracted.admissionConfirmed = false;
                     }
                     break;
-                
+
                 case 'estimatedCost':
                     const costMatch = userMessage.match(/\d{4,}/);
                     if (costMatch && !existingData.estimatedCost) {
                         extracted.estimatedCost = costMatch[0];
                     }
                     break;
-                
+
                 case 'admissionDate':
                 case 'admissionTime':
                     if (!existingData.admissionDate) {
@@ -294,7 +318,7 @@ class ConversationOrchestrator {
                             /(\d{1,2})\s*(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i,
                             /(\d{1,2})[-\/](\d{1,2})/
                         ];
-                        
+
                         for (const pattern of datePatterns) {
                             const match = userMessage.match(pattern);
                             if (match) {
@@ -302,7 +326,7 @@ class ConversationOrchestrator {
                                 break;
                             }
                         }
-                        
+
                         // Check for time
                         const timeMatch = userMessage.match(/(\d{1,2}):?(\d{2})?\s*(am|pm)?/i);
                         if (timeMatch) {
@@ -310,13 +334,13 @@ class ConversationOrchestrator {
                         }
                     }
                     break;
-                
+
                 case 'preferences':
                     if (userMessage && !existingData.preferences) {
                         extracted.preferences = userMessage;
                     }
                     break;
-                
+
                 case 'teleconsultationInterest':
                     if (this.isPositiveResponse(messageLower)) {
                         extracted.teleconsultationInterest = 'yes';
@@ -324,7 +348,15 @@ class ConversationOrchestrator {
                         extracted.teleconsultationInterest = 'no';
                     }
                     break;
-                
+
+                case 'addmissionProcessInterest':
+                    if (this.isPositiveResponse(messageLower)) {
+                        extracted.addmissionProcessInterest = 'yes';
+                    } else if (this.isNegativeResponse(messageLower)) {
+                        extracted.addmissionProcessInterest = 'no';
+                    }
+                    break;
+
                 case 'consultationDate':
                     // Extract date for consultation
                     const consultDatePatterns = [
@@ -341,7 +373,7 @@ class ConversationOrchestrator {
                         }
                     }
                     break;
-                
+
                 case 'consultationTime':
                     // Extract time for consultation
                     const consultTimePattern = /(\d{1,2})\s*(?::(\d{2}))?\s*(am|pm|a\.m\.|p\.m\.)?/i;
@@ -352,7 +384,7 @@ class ConversationOrchestrator {
                     break;
             }
         });
-        
+
         return extracted;
     }
 
@@ -394,25 +426,25 @@ class ConversationOrchestrator {
      */
     getStagePrompt(stage, collectedData, isFirstMessage = false) {
         const systemPrompts = this.getSystemPrompts();
-        
+
         // Start with system prompts
         let prompt = `${systemPrompts}\n\n`;
-        
+
         // Check if this is the first message
-        
+
         if (isFirstMessage) {
             prompt += `**FIRST MESSAGE:** This is the first message in the conversation. You MUST start with a warm greeting using the customer's first name and 👋 emoji. Example: "Hi Vineet👋\\n\\nI see you're looking for hospitals. I hope everything is okay.\\n\\nAre you looking for admission for yourself or a family member?"\n\n`;
             prompt += `**CRITICAL:** You MUST greet the customer first before asking any questions. Start with "Hi [FirstName]👋" and then proceed with the stage instructions.\n\n`;
         }
-        
+
         // Add stage-specific prompt
         const stagePrompt = stage.promptTemplate || '';
-        
+
         // Add context about what's missing
         if (stage.id === 'collect_admission_details') {
             const hasCost = !!collectedData.estimatedCost;
             const hasDate = !!collectedData.admissionDate;
-            
+
             if (!hasCost && !hasDate) {
                 prompt += 'Ask for both estimated cost AND date/time of admission.';
             } else if (hasCost && !hasDate) {
@@ -425,7 +457,7 @@ class ConversationOrchestrator {
         } else {
             prompt += stagePrompt;
         }
-        
+
         return prompt;
     }
 }

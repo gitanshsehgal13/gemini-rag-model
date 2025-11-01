@@ -472,11 +472,10 @@ class IntentJourneyService {
       prompt += `- Use info from history (who, what, where mentioned)\n`;
       if (hasAskedForCostAndDate && !hasProvidedBothCostAndDate) {
         if (hasProvidedCost && !hasProvidedDateTime) {
-          prompt += `- Customer provided cost (${
-            customerContextHistory.find(
-              (m) => m.incommingMessage && m.incommingMessage.match(/\d{4,}/)
-            )?.incommingMessage
-          }). Only ask for DATE/TIME, DON'T ask for cost again!\n`;
+          prompt += `- Customer provided cost (${customerContextHistory.find(
+            (m) => m.incommingMessage && m.incommingMessage.match(/\d{4,}/)
+          )?.incommingMessage
+            }). Only ask for DATE/TIME, DON'T ask for cost again!\n`;
         } else if (hasProvidedDateTime && !hasProvidedCost) {
           prompt += `- Customer provided date/time. Only ask for COST, DON'T ask for date/time again!\n`;
         } else {
@@ -531,9 +530,8 @@ class IntentJourneyService {
       prompt += `**Hospitals Available (${contextPayload.hospitalData.department}, ${contextPayload.hospitalData.location}):**\n`;
       prompt += `ALL covered by Tata AIG for cashless treatment ✅\n\n`;
       contextPayload.hospitalData.hospitals.forEach((hospital, index) => {
-        prompt += `${index + 1}. *${hospital.hospitalName}*\n   ${
-          hospital.hospitalAddress
-        }, ${hospital.city}\n`;
+        prompt += `${index + 1}. *${hospital.hospitalName}*\n   ${hospital.hospitalAddress
+          }, ${hospital.city}\n`;
       });
       prompt += `\nPresent these clearly with *bold* names, \\n breaks, and warm tone.\n\n`;
     }
@@ -999,18 +997,18 @@ Only respond with the JSON, nothing else.`;
 
       const hospitalData = selectedHospital
         ? {
-            hospitalName: selectedHospital.hospitalName,
-            hospitalAddress: selectedHospital.hospitalAddress,
-            hospitalAddressLine2: selectedHospital.city,
-            city: selectedHospital.city,
-            hospitalCityTownVillage: selectedHospital.city,
-            zone: selectedHospital.zone,
-            state: selectedHospital.state,
-            hospitalState: selectedHospital.state,
-            pincode: selectedHospital.pincode,
-            hospitalPincode: selectedHospital.pincode,
-            hospitalCountry: "INDIA",
-          }
+          hospitalName: selectedHospital.hospitalName,
+          hospitalAddress: selectedHospital.hospitalAddress,
+          hospitalAddressLine2: selectedHospital.city,
+          city: selectedHospital.city,
+          hospitalCityTownVillage: selectedHospital.city,
+          zone: selectedHospital.zone,
+          state: selectedHospital.state,
+          hospitalState: selectedHospital.state,
+          pincode: selectedHospital.pincode,
+          hospitalPincode: selectedHospital.pincode,
+          hospitalCountry: "INDIA",
+        }
         : null;
 
       if (!hospitalData) {
@@ -1039,8 +1037,8 @@ Only respond with the JSON, nothing else.`;
       const familyMemberName =
         memberRelation !== "Self" && this.policyInfo
           ? this.policyInfo.insuredMembers
-              ?.find((m) => m.relationship === memberRelation)
-              ?.name.split(" ")[0]
+            ?.find((m) => m.relationship === memberRelation)
+            ?.name.split(" ")[0]
           : null;
 
       this.claimInitiationService
@@ -1707,6 +1705,8 @@ Your response (medical condition only):`;
           `🔄 Customer responding to scheduled tele-consultation message, transitioning to teleconsultation_response stage`
         );
         conversationState.currentStageId = "teleconsultation_response";
+        currentStage.id = "teleconsultation_response";
+        currentStage.name = "Teleconsultation Response";
         conversationState.collectedData.teleconsultationInterest =
           this.isPositiveResponse(query) ? "yes" : "no";
       }
@@ -1850,12 +1850,12 @@ Your response (medical condition only):`;
                 conversationState.collectedData.patientRelation === "Self"
                   ? "your"
                   : this.policyInfo?.insuredMembers
-                      ?.find(
-                        (m) =>
-                          m.relationship ===
-                          conversationState.collectedData.patientRelation
-                      )
-                      ?.name.split(" ")[0] || "the patient";
+                    ?.find(
+                      (m) =>
+                        m.relationship ===
+                        conversationState.collectedData.patientRelation
+                    )
+                    ?.name.split(" ")[0] || "the patient";
 
               const confirmationMessage =
                 `✅ Great news, ${firstName}!\n\n` +
@@ -1979,8 +1979,7 @@ Your response (medical condition only):`;
       if (!medicalReason) return null;
 
       console.log(
-        `🔍 Searching hospitals for: "${medicalReason}" in ${
-          location || "Mumbai"
+        `🔍 Searching hospitals for: "${medicalReason}" in ${location || "Mumbai"
         }`
       );
 
@@ -2269,28 +2268,31 @@ Department:`;
 
       let prompt = `You are a ${intentConfig.brand_voice.persona}. Be ${intentConfig.brand_voice.tone}.\n\n`;
       prompt += `Customer: ${firstName}\n\n`;
-      prompt += `**CONTEXT:** The customer just responded to this scheduled message:\n`;
-      prompt += `"${lastScheduledMessage}"\n\n`;
-      prompt += `**CUSTOMER RESPONSE:** "${
-        conversationHistory.filter((msg) => msg.incommingMessage).pop()
+      if (lastScheduledMessage) {
+        prompt += `**CONTEXT:** The customer just responded to this scheduled message:\n`;
+        prompt += `"${lastScheduledMessage}"\n\n`;
+        prompt += `**CUSTOMER RESPONSE:** "${conversationHistory.filter((msg) => msg.incommingMessage).pop()
           ?.incommingMessage || ""
-      }"\n\n`;
-      prompt += `**TASK:** Handle their response to the tele-consultation offer.\n\n`;
-
+          }"\n\n`;
+        prompt += `**TASK:** Handle their response to the tele-consultation offer.\n\n`;
+      }
       if (collectedData.teleconsultationInterest === "yes") {
         prompt += `**INSTRUCTIONS:** Customer said YES to tele-consultation. Ask for their preferred date and time for the consultation. Clarify this is a consultation, not admission.\n\n`;
         prompt += `**EXAMPLE RESPONSE:** "Great! I will schedule a follow-up tele consultation with your healthcare provider. Please let me know your preferred date and time for the consultation."\n\n`;
-      } else {
+      } else if (collectedData.addmissionProcessInterest === "no") {
+        prompt += `**INSTRUCTIONS:** Customer said YES to tele-consultation. \n\n`;
+        prompt += `**EXAMPLE RESPONSE:** You can instantly connect with a doctor online. Simply book your consultation through the link below.👉 https://www.1mg.com/online-doctor-consultation \n\n`;
+        prompt += `Add something like this in the response at last: Is there anything else I can help you with? \n\n`;
+      }
+      else {
         prompt += `**INSTRUCTIONS:** Customer said NO to tele-consultation. Thank them politely and close the conversation.\n\n`;
         prompt += `**EXAMPLE RESPONSE:** "No problem at all! If you need any assistance in the future, please feel free to reach out. Take care!"\n\n`;
       }
-
       prompt += `Respond naturally with proper WhatsApp formatting (*bold*, \\n breaks). Be warm and supportive.`;
 
       const latestUserMessage =
         conversationHistory.filter((msg) => msg.incommingMessage).pop()
           ?.incommingMessage || "";
-
       return await this.geminiService.generateIntentBasedResponse(
         prompt,
         latestUserMessage,
@@ -2333,9 +2335,8 @@ Department:`;
       prompt += `Customer: ${firstName}\n\n`;
       prompt += `**CONTEXT:** Customer provided consultation preferences:\n`;
       prompt += `- Date: ${collectedData.consultationDate || "Not provided"}\n`;
-      prompt += `- Time: ${
-        collectedData.consultationTime || "Not provided"
-      }\n\n`;
+      prompt += `- Time: ${collectedData.consultationTime || "Not provided"
+        }\n\n`;
       prompt += `**TASK:** Confirm the tele-consultation appointment details.\n\n`;
       prompt += `**INSTRUCTIONS:** Confirm the tele-consultation appointment details and ask them to be available at the scheduled time.\n\n`;
       prompt += `**EXAMPLE RESPONSE:** "We have successfully scheduled your follow-up tele consultation with your healthcare provider on ${collectedData.consultationDate} at ${collectedData.consultationTime}. Please ensure you are available at that time for the consultation."\n\n`;

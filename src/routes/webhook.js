@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
 // Import constants
 const CONFIG = require('../../config/constants');
 
@@ -25,11 +24,11 @@ router.post('/dialogflow', async (req, res) => {
     console.log('Received Dialogflow webhook request:', JSON.stringify(req.body, null, 2));
 
     const { queryResult, session, queryParams } = req.body;
-    
+
     // Extract input contexts for context continuity
     const inputContexts = req.body.queryResult?.outputContexts || [];
     console.log('Input contexts:', JSON.stringify(inputContexts, null, 2));
-    
+
     if (!queryResult || !queryResult.queryText) {
       const errorMsg = removeSpecialCharacters("I didn't understand your request. Please try again.");
       return res.status(400).json({
@@ -44,7 +43,7 @@ router.post('/dialogflow', async (req, res) => {
 
     // Extract query text from Dialogflow request
     const queryText = queryResult.queryText;
-    
+
     // Use customer ID from constants
     const customerId = CONFIG.DEFAULT_CUSTOMER_ID;
 
@@ -52,7 +51,8 @@ router.post('/dialogflow', async (req, res) => {
 
     // Get customer service instance from app
     const customerService = req.app.get('customerService');
-    
+    // const healthCheckupService = req.app.get('healthCheckupService');
+
     if (!customerService) {
       console.error('Customer service not available');
       const errorMsg = removeSpecialCharacters("Sorry, the service is temporarily unavailable. Please try again later.");
@@ -69,14 +69,14 @@ router.post('/dialogflow', async (req, res) => {
     // Extract context parameters for enhanced query processing
     let contextParams = {};
     let conversationHistory = [];
-    
+
     // Get context from input contexts
     inputContexts.forEach(context => {
       if (context.parameters) {
         contextParams = { ...contextParams, ...context.parameters };
       }
     });
-    
+
     // Build conversation history from context
     if (contextParams.lastQuery) {
       conversationHistory.push({
@@ -94,8 +94,19 @@ router.post('/dialogflow', async (req, res) => {
       context: contextParams,
       conversationHistory: conversationHistory
     };
+    console.log("🏥 Routing to Health Checkup Journey Service");
     
-    const result = await customerService.queryDocuments(customerId, queryText, queryOptions);
+    // Get health checkup service from customer service
+    const healthCheckupService = customerService.intentJourneyService?.healthCheckupService;
+    if (!healthCheckupService) {
+      throw new Error('Health checkup service not available');
+    }
+    
+    const result = await healthCheckupService.processHealthCheckupQuery(
+      customerId,
+      queryText,
+    );
+    // const result = await customerService.queryDocuments(customerId, queryText, queryOptions);
 
     console.log(`Dialogflow query result for ${customerId}:`, {
       confidence: result.confidence,
@@ -105,10 +116,10 @@ router.post('/dialogflow', async (req, res) => {
 
     // Format response for Dialogflow
     const rawAnswerText = result.answer || "I couldn't find specific information about your query. Please contact customer service for more detailed assistance.";
-    
+
     // Remove special characters for voice-friendly output
     const answerText = removeSpecialCharacters(rawAnswerText);
-    
+
     // Enhanced context management for follow-up queries
     const outputContexts = [
       {
@@ -157,16 +168,16 @@ router.post('/dialogflow', async (req, res) => {
     };
 
     console.log('Sending Dialogflow response:', JSON.stringify(dialogflowResponse, null, 2));
-    
+
     res.json(dialogflowResponse);
 
   } catch (error) {
     console.error('Error processing Dialogflow webhook:', error);
     console.error('Error stack:', error.stack);
-    
+
     const rawErrorText = `Sorry, I encountered an error while processing your request: ${error.message}. Please try again.`;
     const errorText = removeSpecialCharacters(rawErrorText);
-    
+
     res.status(500).json({
       fulfillmentText: errorText,
       fulfillmentMessages: [{
@@ -182,8 +193,8 @@ router.post('/dialogflow', async (req, res) => {
  * Health check endpoint for webhook
  */
 router.get('/health', (req, res) => {
-  res.json({ 
-    status: 'healthy', 
+  res.json({
+    status: 'healthy',
     service: 'dialogflow-webhook',
     timestamp: new Date().toISOString()
   });

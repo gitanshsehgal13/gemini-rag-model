@@ -118,21 +118,73 @@ class BaseOrchestrator {
     /**
      * Check if response is positive
      */
-    isPositiveResponse(message) {
-        const positiveKeywords = ['yes', 'sure', 'okay', 'ok', 'yep', 'yeah', 'absolutely', 'definitely', 'of course'];
-        const messageLower = message.toLowerCase();
-        return positiveKeywords.some(keyword => messageLower.includes(keyword));
-    }
+    // isPositiveResponse(message) {
+    //     const positiveKeywords = ['yes', 'sure', 'okay', 'ok', 'yep', 'yeah', 'absolutely', 'definitely', 'of course'];
+    //     const messageLower = message.toLowerCase();
+    //     return positiveKeywords.some(keyword => messageLower.includes(keyword));
+    // }
+     isPositiveResponse(message = "") {
+        if (typeof message !== "string" || message.trim().length < 1) return false;
+      
+        const text = message.toLowerCase().trim();
+      
+        // English + Hinglish + Hindi positive cues
+        const positiveKeywords = [
+          // English
+          "yes", "yep", "yeah", "ok", "okay", "sure", "absolutely", "definitely",
+          "of course", "fine", "alright", "sounds good", "go ahead", "please do",
+          "confirmed", "accepted", "done", "great", "perfect",
+      
+          // Hinglish/Hindi (Roman)
+          "haan", "ha", "hanji", "haaji", "bilkul", "thik hai", "theek hai",
+          "sahi hai", "ho jaega", "ho jayega", "ho gya", "ho gaya", "kar do",
+          "karo", "hoga", "chalo", "theek", "accha hai", "acha hai", "karlo",
+          "kar lena", "kar dijiye", "kr dijiye", "krdo", "sure haan", "haan ok",
+      
+        ];
+      
+        // Faster match with whole-word detection
+        const positiveRegex = new RegExp(`\\b(${positiveKeywords.join("|")})\\b`, "i");
+      
+        return positiveRegex.test(text);
+      }
+      
 
     /**
      * Check if response is negative
      */
-    isNegativeResponse(message) {
-        const negativeKeywords = ['no', 'not interested', 'decline', 'cancel', 'not now', 'later'];
-        const messageLower = message.toLowerCase();
-        return negativeKeywords.some(keyword => messageLower.includes(keyword));
-    }
-
+    // isNegativeResponse(message) {
+    //     const negativeKeywords = ['no', 'not interested', 'decline', 'cancel', 'not now', 'later'];
+    //     const messageLower = message.toLowerCase();
+    //     return negativeKeywords.some(keyword => messageLower.includes(keyword));
+    // }
+     isNegativeResponse(message = "") {
+        if (typeof message !== "string" || message.trim().length < 1) return false;
+      
+        const text = message.toLowerCase().trim();
+      
+        // English + Hinglish + Hindi negative expressions
+        const negativeKeywords = [
+          // English
+          "no", "not interested", "don't want", "do not want", "decline",
+          "cancel", "stop", "later", "not now", "maybe later", "skip", "reject",
+          "nah", "never", "don't call", "not required", "no thanks", "no thank you",
+      
+          // Hinglish / Roman Hindi
+          "nahi", "nahi chahiye", "mat karo", "mat karna", "nahi karna",
+          "baad mein", "abhi nahi", "nahi chahta", "nahi chahi", "mana hai",
+          "rehne do", "chod do", "chhodo", "cancel karo", "cancel kar do",
+          "ruko", "ruk jao", "baad me", "nahi lena", "nahi karwana", "mat bhejna",
+          "mat kar do", "mat bhejo", "nahi bhai", "nahi madam", "nahi sir",
+      
+        ];
+      
+        // Word-boundary regex for fast + safe detection
+        const negativeRegex = new RegExp(`\\b(${negativeKeywords.join("|")})\\b`, "i");
+      
+        return negativeRegex.test(text);
+      }
+      
     /**
      * Parse date for various formats
      */
@@ -201,6 +253,48 @@ class BaseOrchestrator {
         console.log(`   Current Stage: ${stage}`);
         console.log(`   Collected Data:`, collectedData);
     }
+    detectLanguage(message) {
+        if (!message || typeof message !== "string") return "English";
+      
+        const text = message.toLowerCase().trim();
+        if (text.length < 2) return "English";
+      
+        const hindiHints = [
+          // Core verbs & auxiliaries
+          "hai", "ho", "haan", "nahi", "na", "kar", "karo", "karna", "karlo",
+          "karle", "kardo", "krdo", "krle", "krna", "kariye", "kijiye",
+          "theek", "thik", "accha", "acha", "bahut", "bhi", "abhi", "kal",
+          "aaj", "parso", "chahiye", "zarurat", "lekin", "kyunki", "kyon",
+          "kaise", "kaun", "kya", "kab", "kis", "kisne", "kyu", "kyun",
+          "ko", "ki", "ke", "se", "mein", "me", "par", "pe", "tha", "thi",
+          "hoga", "hogi", "honge", "hoti", "hote", "raha", "rahe", "rha",
+          // Pronouns & possessives
+          "main", "mai", "meri", "mera", "mere", "tera", "teri", "tumhara",
+          "apna", "apni", "apne", "hum", "hamare", "humara", "aap", "aapka", "aapki", "aapke",
+          "tum", "mujhe", "mujhko", "tumhe", "aapko", "unko", "unka", "unki", "unke",
+          // Common conversational
+          "sab", "kuch", "thoda", "zyada", "kam", "fir", "phir", "mat",
+          "batao", "bataye", "bolo", "sun", "suno", "suna",
+          // Relationships and family
+          "papa", "mummy", "maa", "mata", "pita", "bhai", "behen", "beta", "beti", "bhaiya", "didi",
+          // Politeness & fillers
+          "sir", "madam", "madamji", "bhai sahab", "sahi", "galat", "acha", "theek", "ji", "haanji", "nahiji",
+          // Actions
+          "karwana", "karwado", "karwalo", "karenge", "krdenge", "krdijiye",
+          "hoga na", "ho na", "hai na", "karoge", "karungi", "karunga"
+        ];
+      
+        const hindiRegex = new RegExp(`\\b(${hindiHints.join("|")})\\b`, "i");
+      
+        // Bonus: detect actual Devanagari Hindi (Unicode range)
+        const devanagariRegex = /[\u0900-\u097F]/;
+      
+        if (devanagariRegex.test(text) || hindiRegex.test(text)) return "Hindi";
+        return "English";
+      }
+      
+      
+      
 }
 
 module.exports = BaseOrchestrator;

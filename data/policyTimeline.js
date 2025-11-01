@@ -51,10 +51,10 @@ const policyTimelineData = {
         "insuredRelationship": "Family"
       },
       {
-        "date": "26 Sept 2025",
-        "status": "Pending",
+        "date": "31 October 2025",
+        "status": "Upcoming",
         "title": "Health Checkup Booked",
-        "details": "Sample collection pending for Vineet Singh. Appointment booked at SRL Diagnostics. Sample collection scheduled on 25 Sept 2025 at 09:00 AM.",
+        "details": "Sample collection pending for Akshat. Appointment booked at SRL Diagnostics. Sample collection scheduled on 25 Sept 2025 at 09:00 AM.",
         "benefitValue": "₹8,000 (not yet utilized)",
         "insuredRelationship": "Self"
       },

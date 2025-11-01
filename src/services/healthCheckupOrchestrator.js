@@ -13,7 +13,7 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
         this.stages = intentData.conversationFlow.stages;
         this.recommendedActions = intentData.recomendedAction || [];
         this.healthCheckupPlans = this.loadHealthCheckupPlans();
-        
+
         // Reinitialize scheduling agent with the correct intentJourneyService
         if (intentJourneyService) {
             this.schedulingAgent = new SchedulingAgent(geminiService, intentJourneyService);
@@ -41,24 +41,42 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
     /**
      * Override system prompts for health checkup journey
      */
-    getSystemPrompts() {
-        return `**Your RULES:**
+    getSystemPrompts(query) {
+        let prompts = `**Your RULES:**
 
-1. **Role & Tone:** You are a Proactive TATA AIG Health Insurance Health Concierge. Be professional, empathetic, and supportive. Prioritize clarity and conciseness. Acknowledge the user's message before transitioning to the next step. Assume the user may be stressed and avoid overly formal language. Never greet again after the first message in a session.
+1. **Role & Tone:** TATA AIG * *Proactive TATA AIG Health Insurance Calling Agent*. Be professional, empathetic, and supportive. Prioritize clarity and conciseness.peak naturally, like on a real call. Keep responses short and easy to understand. Acknowledge the user's message before transitioning to the next step. Assume the user may be stressed and avoid overly formal language. Never greet again after the first message in a session.
 
-2. **Natural Variation:** Vary your language and phrasing in each response. Don't use the same words or sentences repeatedly. Be conversational and warm - like talking to a friend.
+2. **Natural Variation:** Vary your language and phrasing in each response. Don't use the same words or sentences repeatedly. Be conversational and warm — like talking to a friend.
 
-3. **Formatting:** All responses must be formatted for WhatsApp. Use *bold* for key names or action items. Use line breaks (\\n) to improve readability.
+3. **Brevity:** Keep every answer under 2 sentences whenever possible. Use plain, spoken English — no long explanations or complex words.
 
-4. **Emoji Usage:** Use 1-2 relevant emojis sparingly when they add warmth or clarity (e.g., 🏥 for hospitals, ✅ for confirmation, 📋 for forms, 💰 for costs 👋 for greetings). Avoid overuse - emojis should enhance, not distract from the message.
+4. **Tone:** Sound warm, polite, and calm. Avoid robotic or scripted phrasing. Add empathy when needed (e.g., “I understand that” or “No worries, I’ll help you with that”).
 
-5. **Policy Data:** Whenever possible, use the *actual names* of family members (Vineet, Punita, Aradhya, Akshat) instead of generic roles (e.g., use 'Punita' instead of 'your wife').
+5. **Policy Data:** Whenever possible, use the *actual names* of family members (Vineet, Punita, Aradhya, Akshat) instead of generic roles (e.g., use "Punita" instead of "your wife").
 
 6. **Process Focus:** Always guide the customer to the immediate next required step in the TATA AIG process. Do not jump ahead or discuss steps not yet relevant.
 
-7. **Conversation History:** If we have recent conversation history, use it to understand context and references (like "this process", "that", "it", etc.).
+7. **Conversation History:** Use recent chat history to maintain context and references (like "this process", "that", "it", etc.).
 
-8. **Avoid Repetition:** DON'T repeat questions already answered above. DON'T greet again (only greet in first message). Use info from history (who, what, where mentioned). Vary your language - be fresh and natural each time.`;
+8. **Avoid Repetition:** Don't repeat questions already answered. Don't greet again. Use history to avoid redundancy. Vary your language and sound natural.
+
+`
+        let detectedLanguage = this.detectLanguage(query);
+        console.log("**************detectedLanguage**************", detectedLanguage);
+        if (detectedLanguage === "Hindi") {
+            prompts += `You are a friendly and professional Indian-speaking assistant. 
+Always talk in **simple, natural Hindi**, just like how people actually speak — 
+a mix of conversational Hindi and a little bit of English (Hinglish), when natural.
+
+Guidelines:
+- Prefer common words over formal or literary Hindi.
+- Avoid overly technical or English-heavy sentences unless needed.
+- Add a friendly touch (like “jee”, “theek hai”, “acha”, “bilkul”, “zaroor”) when appropriate.
+- Example tone: “Ji bilkul, main help karta hoon.”
+Your goal: Sound like a helpful, natural Indian person — not a robot.
+`
+        }
+        return prompts;
     }
 
     /**
@@ -68,7 +86,7 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
         try {
             console.log(`\n🏥 Processing Health Checkup Journey for customer: ${customerId}`);
             console.log(`Query: "${query}"`);
-            console.log("conversationState:",JSON.stringify(conversationState));
+            console.log("conversationState:", JSON.stringify(conversationState));
             // Initialize conversation state if not provided
             if (!conversationState) {
                 // Always start from greeting on first inbound message
@@ -146,13 +164,13 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
 
             // Extract data from customer message
             const extractedData = this.extractHealthCheckupData(query, conversationState.collectedData);
-            
+
             // Update collected data
             Object.assign(conversationState.collectedData, extractedData);
 
             // Check if current stage is complete and should transition
             const shouldTransition = this.shouldTransitionStage(currentStage, conversationState.collectedData, query, isFirstMessage);
-            
+
             let stageForPrompt = currentStage;
             if (shouldTransition) {
                 const nextStageId = this.determineNextHealthCheckupStage(currentStage, conversationState.collectedData, query);
@@ -168,13 +186,13 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
             const stagePrompt = this.getStagePrompt(stageForPrompt, conversationState.collectedData, isFirstMessage, query);
             console.log(`\n📋 Stage Prompt Length: ${stagePrompt.length} characters`);
             console.log(`📋 Stage Prompt Preview: ${stagePrompt.substring(0, 200)}...`);
-            
+
             const customerName = this.policyInfo ? this.policyInfo.policyholder.split(' ')[0] : 'Vineet';
-            
+
             // Build full prompt with customer context
             let prompt = `You are a ${this.intentData.brand_voice?.persona || 'Health Concierge'}. Be ${this.intentData.brand_voice?.tone || 'friendly, professional, health-focused'}.\n\n`;
             prompt += `Customer: ${customerName}\n`;
-            
+
             if (this.policyInfo?.insuredMembers) {
                 prompt += `Family: `;
                 this.policyInfo.insuredMembers.forEach((m, i) => {
@@ -186,7 +204,7 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
 
             prompt += `\n**Current Task:** ${stageForPrompt.name}\n`;
             prompt += `**Instructions:** ${stagePrompt}\n`;
-            
+
             // Add conversation history (show last 5 messages for better context)
             if (conversationHistory.length > 0) {
                 prompt += `\n**Conversation History:**\n`;
@@ -196,7 +214,7 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
                 });
                 prompt += `\n**Important:** Use the conversation history to understand context, but vary your language and phrasing. Be natural, conversational and not too casual or too formal - don't copy previous responses word-for-word.`;
             }
-            
+
             // Add collected data context
             if (Object.keys(conversationState.collectedData).length > 0) {
                 prompt += `**Collected Data:** ${JSON.stringify(conversationState.collectedData, null, 2)}\n\n`;
@@ -207,7 +225,7 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
 
             // Generate response from Gemini
             const response = await this.geminiService.generateIntentBasedResponse(prompt);
-            
+
             // If we reached confirm_appointment, schedule follow-ups and transition to schedule_reminders
             if (conversationState.currentStageId === 'confirm_appointment') {
                 try {
@@ -215,14 +233,14 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
                     const appointmentDate = conversationState.collectedData?.preferredDate || '';
                     console.log(`📆 Triggering health checkup reminders for ${customerFirstName} on ${appointmentDate}`);
                     await this.scheduleHealthCheckupReminders(
-                        appointmentDate, 
-                        customerFirstName, 
-                        conversationState.conversationId, 
-                        '9830323302', 
+                        appointmentDate,
+                        customerFirstName,
+                        conversationState.conversationId,
+                        '9830323302',
                         conversationState.collectedData,
                         conversationHistory  // Pass conversation history to add scheduled messages
                     );
-                    
+
                     // Transition to schedule_reminders stage after scheduling messages
                     console.log(`🔄 Transitioning to schedule_reminders stage after scheduling messages`);
                     conversationState.currentStageId = 'schedule_reminders';
@@ -249,7 +267,7 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
         // Family member selection
         const memberNames = ['vineet', 'punita', 'aradhya', 'akshat', 'self', 'myself', 'spouse', 'wife', 'daughter', 'son'];
         const foundMembers = [];
-        
+
         memberNames.forEach(name => {
             if (messageLower.includes(name)) {
                 if (name === 'vineet' || name === 'self' || name === 'myself') {
@@ -263,7 +281,7 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
                 }
             }
         });
-        
+
         if (foundMembers.length > 0) {
             extractedData.selectedMembers = foundMembers;
         }
@@ -285,42 +303,88 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
 
         // Date and time extraction (enhanced for health checkup)
         const commonData = this.extractDataFromMessage(message, collectedData);
-        
+
         // Enhanced date extraction for health checkup (handles "tomorrow", "next week", etc.)
-        
+
         // Handle relative dates
-        if (messageLower.includes('tomorrow')) {
+        if (messageLower.includes('tomorrow')||messageLower.includes('kal')) {
             const tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
-            extractedData.preferredDate = tomorrow.toLocaleDateString('en-GB', { 
-                day: 'numeric', 
-                month: 'short', 
-                year: 'numeric' 
+            extractedData.preferredDate = tomorrow.toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+        }  else if (messageLower.includes('parso')) {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 2);
+            extractedData.preferredDate = tomorrow.toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
             });
         } else if (messageLower.includes('next week')) {
             const nextWeek = new Date();
             nextWeek.setDate(nextWeek.getDate() + 7);
-            extractedData.preferredDate = nextWeek.toLocaleDateString('en-GB', { 
-                day: 'numeric', 
-                month: 'short', 
-                year: 'numeric' 
+            extractedData.preferredDate = nextWeek.toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
             });
         } else if (commonData.date) {
             extractedData.preferredDate = commonData.date;
         }
-        
+
         // Enhanced time extraction for health checkup
+        // if (commonData.time) {
+        //     extractedData.preferredTime = commonData.time;
+        // } else {
+        //     // Handle time patterns like "10 AM", "2 PM", etc.
+        //     const timePattern = /(\d{1,2})\s*(am|pm|a\.m\.|p\.m\.)/i;
+        //     const timeMatch = message.match(timePattern);
+        //     if (timeMatch) {
+        //         extractedData.preferredTime = timeMatch[0];
+        //     }
+        // }
         if (commonData.time) {
             extractedData.preferredTime = commonData.time;
-        } else {
-            // Handle time patterns like "10 AM", "2 PM", etc.
-            const timePattern = /(\d{1,2})\s*(am|pm|a\.m\.|p\.m\.)/i;
-            const timeMatch = message.match(timePattern);
-            if (timeMatch) {
-                extractedData.preferredTime = timeMatch[0];
+          } else {
+            // Map of common Hindi number words to digits
+            const hindiNumberMap = {
+              'ek': 1, 'do': 2, 'teen': 3, 'char': 4, 'paanch': 5, 'chhah': 6,
+              'chhe': 6, 'saat': 7, 'aath': 8, 'nau': 9, 'dus': 10, 'gyarah': 11,
+              'barah': 12, 'ek baje': 1, 'do baje': 2, 'teen baje': 3, 'char baje': 4,
+              'paanch baje': 5, 'chhah baje': 6, 'chhe baje': 6, 'saat baje': 7,
+              'aath baje': 8, 'nau baje': 9, 'dus baje': 10, 'gyarah baje': 11, 'barah baje': 12
+            };
+          
+            const text = message.toLowerCase();
+          
+            // Replace Hindi number words with digits for easier matching
+            let normalizedText = text;
+            for (const [word, num] of Object.entries(hindiNumberMap)) {
+              const regex = new RegExp(`\\b${word}\\b`, 'gi');
+              normalizedText = normalizedText.replace(regex, num.toString());
             }
-        }
-        
+          
+            // Handle English & Hindi/roman time patterns
+            const timePatterns = [
+              /\b(\d{1,2})\s*(am|pm|a\.m\.|p\.m\.)\b/i,                      // English: 10 AM
+              /\b(\d{1,2})\s*baje\b/i,                                       // 10 baje
+              /\b(\d{1,2})\s*baje\s*(subah|dopahar|shaam|raat)?\b/i,         // 10 baje shaam
+              /\b(\d{1,2})\s*(बजे|सुबह|शाम|रात|दोपहर)\b/i                   // Hindi script
+            ];
+          
+            for (const pattern of timePatterns) {
+              const match = normalizedText.match(pattern);
+              if (match) {
+                extractedData.preferredTime = match[0].trim();
+                break;
+              }
+            }
+          }
+          
+
         // Include other common data
         Object.assign(extractedData, commonData);
 
@@ -339,14 +403,14 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
      */
     shouldTransitionStage(currentStage, collectedData, query, isFirstMessage = false) {
         console.log(`\n🔍 Checking if stage ${currentStage.id} should transition...`);
-        
+
         // Special handling for first message - NEVER transition on first message
         // The first message should always use its own stage template (greeting)
         if (isFirstMessage) {
             console.log(`   ⏸️ First message - staying in current stage to show greeting`);
             return false;
         }
-        
+
         // Special handling for each stage
         switch (currentStage.id) {
             case 'greeting':
@@ -356,7 +420,7 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
                     return true;
                 }
                 return false;
-                
+
             case 'identify_member':
                 // Transition if members are selected OR customer gives positive response
                 if (collectedData.selectedMembers && collectedData.selectedMembers.length > 0) {
@@ -370,7 +434,7 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
                     return true;
                 }
                 return false;
-                
+
             case 'show_package_options':
                 // Transition if customer accepts or declines the package
                 if (this.isPositiveResponse(query)) {
@@ -387,12 +451,12 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
                     return true;
                 }
                 return false;
-                
+
             case 'collect_scheduling_details':
                 // Transition if we have both date and time
                 const hasDate = !!collectedData.preferredDate;
                 const hasTime = !!collectedData.preferredTime;
-                
+
                 if (hasDate && hasTime) {
                     // Auto-set collection method
                     if (!collectedData.collectionMethod) {
@@ -403,7 +467,7 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
                 }
                 console.log(`   ⏸️ Still collecting scheduling details (hasDate: ${hasDate}, hasTime: ${hasTime})`);
                 return false;
-                
+
             case 'confirm_appointment':
                 // Auto-transition after confirmation
                 console.log(`   ✅ Appointment confirmed`);
@@ -422,22 +486,22 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
                 }
                 console.log(`   ⏸️ Waiting for customer response to teleconsultation offer`);
                 return false;
-                
+
             case 'teleconsultation_call':
                 // Auto-transition to end after confirming teleconsultation
                 console.log(`   ✅ Teleconsultation confirmed - journey complete`);
                 return true;
-                
+
             case 'close_politely':
                 // Auto-transition to end after closing politely
                 console.log(`   ✅ Closed politely - journey complete`);
                 return true;
-                
+
             case 'end':
                 // Journey is complete, no more transitions
                 console.log(`   ✅ Journey complete - no further transitions`);
                 return false;
-                
+
             default:
                 // For other stages, don't auto-transition
                 return false;
@@ -449,18 +513,18 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
      */
     determineNextHealthCheckupStage(currentStage, collectedData, query) {
         const transitions = currentStage.transitions;
-        
+
         console.log(`\n🔄 Determining next stage from: ${currentStage.id}`);
         console.log(`   Query: "${query}"`);
         console.log(`   Collected Data:`, JSON.stringify(collectedData, null, 2));
         console.log(`   Available Transitions:`, JSON.stringify(transitions, null, 2));
-        
+
         // Universal check for negative responses across all stages
         if (this.isNegativeResponse(query)) {
             console.log(`❌ Customer declined at ${currentStage.id} stage, transitioning to offer_health_manager_call`);
             return transitions.declined || 'offer_health_manager_call';
         }
-        
+
         // Special handling for greeting stage
         if (currentStage.id === 'greeting') {
             if (this.isPositiveResponse(query)) {
@@ -473,12 +537,12 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
             collectedData.initialIntent = true;
             return transitions.default || 'identify_member';
         }
-        
+
         // Check for specific transitions based on collected data
         if (transitions.yes && this.isPositiveResponse(query)) {
             return transitions.yes;
         }
-        
+
         if (transitions.no && this.isNegativeResponse(query)) {
             return transitions.no;
         }
@@ -489,18 +553,18 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
                 console.log(`✅ Members identified: ${collectedData.selectedMembers.join(', ')}`);
                 return transitions.collected || 'show_package_options';
             }
-            
+
             // If user gives a positive response but no specific members mentioned, default to policyholder
             if (this.isPositiveResponse(query)) {
                 collectedData.selectedMembers = ['Vineet']; // Default to policyholder
                 console.log(`✅ Defaulting to policyholder (Vineet) for health checkup`);
                 return transitions.collected || 'show_package_options';
             }
-            
+
             // If no members extracted yet, stay in this stage
             return currentStage.id;
         }
-     
+
         // Special handling for show_package_options stage
         if (currentStage.id === 'show_package_options') {
 
@@ -525,7 +589,7 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
             // Check if we have all required data (date and time)
             const hasDate = !!collectedData.preferredDate;
             const hasTime = !!collectedData.preferredTime;
-            
+
             if (hasDate && hasTime) {
                 console.log(`✅ Appointment confirmed with date and time, auto-transitioning to schedule_reminders`);
                 return transitions.complete || 'schedule_reminders';
@@ -541,7 +605,7 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
                 // Only check for date and time, collection method is auto-set
                 const hasDate = !!collectedData.preferredDate;
                 const hasTime = !!collectedData.preferredTime;
-                
+
                 if (hasDate && hasTime) {
                     // Auto-set collection method if not already set
                     if (!collectedData.collectionMethod) {
@@ -553,7 +617,7 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
                 // For other stages, check required data normally
                 const requiredData = currentStage.requiredData || [];
                 const hasRequiredData = requiredData.every(field => collectedData[field]);
-                
+
                 if (hasRequiredData) {
                     return transitions.collected;
                 }
@@ -563,7 +627,7 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
         if (transitions.complete) {
             const requiredData = currentStage.requiredData || [];
             const hasRequiredData = requiredData.every(field => collectedData[field]);
-            
+
             if (hasRequiredData) {
                 return transitions.complete;
             }
@@ -576,10 +640,10 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
 
         // Special handling for tele-consultation response after scheduled messages
         // This handles customer responses to the final scheduled message about tele-consultation
-        if (collectedData.scheduledMessagesSent && 
+        if (collectedData.scheduledMessagesSent &&
             collectedData.lastScheduledMessage === 'teleconsultation' &&
             (this.isPositiveResponse(query) || this.isNegativeResponse(query))) {
-            
+
             console.log(`📞 Customer responded to tele-consultation offer: ${this.isPositiveResponse(query) ? 'POSITIVE' : 'NEGATIVE'}`);
             return 'teleconsultation_response';
         }
@@ -593,45 +657,45 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
      * Similar to claim event orchestrator's getStagePrompt()
      */
     getStagePrompt(stage, collectedData, isFirstMessage = false, query = '') {
-        const systemPrompts = this.getSystemPrompts();
-        
+        const systemPrompts = this.getSystemPrompts(query);
+
         // Start with system prompts
         let prompt = `${systemPrompts}\n\n`;
-        
+
         // Add first message greeting if needed
         if (isFirstMessage) {
             const customerName = this.policyInfo ? this.policyInfo.policyholder.split(' ')[0] : 'there';
-            prompt += `**FIRST MESSAGE - CRITICAL:** This is the first message in this conversation. 
+            prompt += `**FIRST MESSAGE - CRITICAL:** The first message should be like a real call.
             
-GREET like this example:
+GREET NATURALLY like this example:
 "Hi ${customerName}! 👋
 
 I hope you're having a good day.
 
 I wanted to remind you about a valuable benefit you and your family are entitled to: a *free annual health check-up*! This is a great way to stay on top of your well-being and catch any potential issues early.
 
-Would you like me to help you get started with scheduling your health check-up? ✅"
+Would you like me to help you get started with scheduling your health check-up anytime soon? ✅"
 
 DO NOT introduce yourself as "Proactive TATA AIG Health Insurance Health Concierge" or any formal title. Just greet naturally and get to the point about the health check-up benefit.\n\n`;
         }
-        
+
         // Add stage-specific prompt with conditional logic
         const stagePrompt = stage.promptTemplate || '';
-        
+
         // Universal check for negative responses across all stages
         // Use isNegativeResponse function to detect various forms of "no"
         // if (this.isNegativeResponse(query)) {
         //     prompt += `**Customer declined health checkup.** Offer alternative assistance like health manager call or other insurance services. Be helpful and understanding.`;
         //     return prompt;
         // }
-        
+
         // Stage-specific conditional prompts based on collected data
         if (stage.id === 'identify_member') {
-            
+
             const hasMembers = !!collectedData.selectedMembers;
-            
+
             if (!hasMembers) {
-                prompt += `${stagePrompt}\n\n**Be natural and conversational.** Ask which family member(s) need the health checkup. Available: Vineet (self), Punita (spouse), Aradhya (daughter), Akshat (son). Use different phrasing each time - be warm and personal.`;
+                prompt += `${stagePrompt}\n\n**Be natural and conversational.** Ask which family member(s) need the health checkup. Use different phrasing each time - be warm and personal.`;
             } else {
                 // Member has been selected; acknowledge only. Package presentation happens in show_package_options
                 const memberNames = collectedData.selectedMembers.join(' and ');
@@ -640,12 +704,12 @@ DO NOT introduce yourself as "Proactive TATA AIG Health Insurance Health Concier
         } else if (stage.id === 'collect_scheduling_details') {
             const hasDate = !!collectedData.preferredDate;
             const hasTime = !!collectedData.preferredTime;
-            
+
             // Default collection method to home sample collection (don't ask)
             if (!collectedData.collectionMethod) {
                 collectedData.collectionMethod = 'home sample collection';
             }
-            
+
             if (!hasDate && !hasTime) {
                 prompt += `${stagePrompt}\n\n**Ask naturally for scheduling:** We do home sample collection. Ask for their preferred date and time in a conversational way. Vary your phrasing - be warm and helpful.`;
             } else if (hasDate && !hasTime) {
@@ -658,12 +722,12 @@ DO NOT introduce yourself as "Proactive TATA AIG Health Insurance Health Concier
         } else if (stage.id === 'show_package_options') {
             // Always include the stage prompt template first
             prompt += `${stagePrompt}\n\n`;
-            
+
             const selectedMembers = collectedData.selectedMembers || [];
-            const memberContext = selectedMembers.length > 0 
-                ? `for ${selectedMembers.join(' and ')}` 
+            const memberContext = selectedMembers.length > 0
+                ? `for ${selectedMembers.join(' and ')}`
                 : '';
-            
+
             // Get available health checkup plan
             let planDetails = '';
             if (this.healthCheckupPlans && this.healthCheckupPlans.length > 0) {
@@ -677,7 +741,7 @@ ${plan.testDetails.map((test, i) => `${i + 1}. ${test}`).join('\n')}`;
             } else {
                 console.log(`⚠️ No health checkup plans available to add to prompt`);
             }
-            
+
             prompt += `**Present the health checkup package naturally.** 
 
 **Your task:** Acknowledge ${selectedMembers.join(' and ')} and present the recommended package below. Be conversational and warm - vary your language each time.
@@ -707,7 +771,7 @@ ${plan.testDetails.map((test, i) => `${i + 1}. ${test}`).join('\n')}`;
         } else {
             prompt += stagePrompt;
         }
-        
+
         return prompt;
     }
 
@@ -746,10 +810,10 @@ ${plan.testDetails.map((test, i) => `${i + 1}. ${test}`).join('\n')}`;
 
 **Recent Conversation:**
 ${conversationHistory.slice(-3).map(msg => {
-    if (msg.incommingMessage) return `Customer: ${msg.incommingMessage}`;
-    if (msg.sentMessage) return `You: ${msg.sentMessage}`;
-    return '';
-}).filter(m => m).join('\n')}
+            if (msg.incommingMessage) return `Customer: ${msg.incommingMessage}`;
+            if (msg.sentMessage) return `You: ${msg.sentMessage}`;
+            return '';
+        }).filter(m => m).join('\n')}
 
 **Instructions:**
 1. Follow the stage instructions exactly
@@ -795,11 +859,11 @@ Generate a helpful response for the health check-up journey:`;
                 text: reminder.text,
                 delayInSeconds: reminder.delayInSeconds
             }));
-            
+
             // Use provided IDs or generate defaults
             const finalConversationId = conversationId || this.generateConversationId();
             const finalCustomerId = customerId || '9830323302'; // Default customer ID for health checkup
-            
+
             await this.schedulingAgent.scheduleMessages(finalConversationId, finalCustomerId, messages);
 
             // Add scheduled messages to conversation history

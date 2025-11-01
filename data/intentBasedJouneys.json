@@ -42,7 +42,24 @@
                     ],
                     "promptTemplate": "Ask which family member needs care (self, wife, son, daughter, etc.). Can you actual names from policy data.",
                     "transitions": {
-                        "collected": "medical_reason"
+                        "collected": "confirm_addmission_teleconsultation"
+                    }
+                },
+                {
+                    "id": "confirm_addmission_teleconsultation",
+                    "name": "Confirm Admission or Teleconsultation",
+                    "agent": "DataCollectionAgent",
+                    "requiredData": [
+                        "addmissionProcessInterest"
+                    ],
+                    "collectData": [
+                        "patientRelation",
+                        "patientName"
+                    ],
+                    "promptTemplate": "Ask like: Would you like to get admitted to the hospital, or should we arrange an on-call doctor for you right away?",
+                    "transitions": {
+                        "yes": "medical_reason",
+                        "no": "teleconsultation_response"
                     }
                 },
                 {
@@ -243,7 +260,8 @@
                     "collectData": [],
                     "promptTemplate": "Thank them and invite to reach out if they need assistance.",
                     "transitions": {
-                        "complete": "end"
+                        "complete": "end",
+                        "initialIntent": "medical_reason"
                     }
                 }
             ]
