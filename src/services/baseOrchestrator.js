@@ -133,14 +133,13 @@ class BaseOrchestrator {
           // English
           "yes", "yep", "yeah", "ok", "okay", "sure", "absolutely", "definitely",
           "of course", "fine", "alright", "sounds good", "go ahead", "please do",
-          "confirmed", "accepted", "done", "great", "perfect",
+          "confirmed", "accepted", "done", "great", "perfect","please book","proceed",
       
           // Hinglish/Hindi (Roman)
-          "haan", "ha", "hanji", "haaji", "bilkul", "thik hai", "theek hai",
-          "sahi hai", "ho jaega", "ho jayega", "ho gya", "ho gaya", "kar do",
+          "haan","han", "ha", "hanji", "haaji", "bilkul", "thik hai", "theek hai",
+          "sahi hai", "ho jaega", "ho jayega", "ho gya", "ho gaya", "kar do","kardo",
           "karo", "hoga", "chalo", "theek", "accha hai", "acha hai", "karlo",
-          "kar lena", "kar dijiye", "kr dijiye", "krdo", "sure haan", "haan ok",
-      
+          "kar lena", "kar dijiye", "kr dijiye", "krdo", "sure haan", "haan ok","Karva do","Karva"      
         ];
       
         // Faster match with whole-word detection

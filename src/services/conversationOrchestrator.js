@@ -88,7 +88,7 @@ class ConversationOrchestrator {
 
             case 'confirm_addmission_teleconsultation':
                 // Decide path: admission flow vs teleconsultation flow
-                if (userResponse.toLowerCase().includes('admission')) {
+                if (userResponse.toLowerCase().includes('admission')||userResponse.toLowerCase().includes('admit')) {
                     collectedData.addmissionProcessInterest = 'yes';
                     return transitions.yes || currentStage.id;
                 } else if (userResponse.toLowerCase().includes('consultation') || userResponse.toLowerCase().includes('doctor')) {
