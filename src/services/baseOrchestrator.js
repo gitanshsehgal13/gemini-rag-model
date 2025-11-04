@@ -133,7 +133,7 @@ class BaseOrchestrator {
           // English
           "yes", "yep", "yeah", "ok", "okay", "sure", "absolutely", "definitely",
           "of course", "fine", "alright", "sounds good", "go ahead", "please do",
-          "confirmed", "accepted", "done", "great", "perfect","please book","proceed",
+          "confirmed", "accepted", "done", "great", "perfect","please book","proceed","intrested",
       
           // Hinglish/Hindi (Roman)
           "haan","han", "ha", "hanji", "haaji", "bilkul", "thik hai", "theek hai",
