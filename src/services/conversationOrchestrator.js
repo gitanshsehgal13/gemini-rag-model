@@ -339,25 +339,108 @@ Your goal: Sound like a helpful, natural Indian person — not a robot.`
                 case 'admissionTime':
                     if (!existingData.admissionDate) {
                         // Check for date patterns
+                        // const datePatterns = [
+                        //     /(monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i,
+                        //     /(\d{1,2})\s*(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i,
+                        //     /(\d{1,2})[-\/](\d{1,2})/
+                        // ];
+                        let admissionDate='';
+                        let admissionTime='';
+                        const messageLower = userMessage.toLowerCase();
                         const datePatterns = [
-                            /(monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i,
-                            /(\d{1,2})\s*(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i,
-                            /(\d{1,2})[-\/](\d{1,2})/
+                            /(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{1,2})(?:st|nd|rd|th)?/i,
+                            /(\d{1,2})(?:st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)/i,
+                            /(\d{1,2})\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i,
+                            /(\d{1,2})\/(\d{1,2})\/(\d{4})/,
+                            /(\d{1,2})-(\d{1,2})-(\d{4})/
                         ];
-
                         for (const pattern of datePatterns) {
                             const match = userMessage.match(pattern);
                             if (match) {
-                                extracted.admissionDate = match[0];
+                                admissionDate = match[0];
                                 break;
                             }
                         }
 
-                        // Check for time
-                        const timeMatch = userMessage.match(/(\d{1,2}):?(\d{2})?\s*(am|pm)?/i);
-                        if (timeMatch) {
-                            extracted.admissionTime = timeMatch[0];
+                        if (messageLower.includes('tomorrow')||messageLower.includes('kal')) {
+                            const tomorrow = new Date();
+                            tomorrow.setDate(tomorrow.getDate() + 1);
+                            extracted.admissionDate = tomorrow.toLocaleDateString('en-GB', {
+                                day: 'numeric',
+                                month: 'short',
+                                year: 'numeric'
+                            });
+                        }  else if (messageLower.includes('parso')) {
+                            const tomorrow = new Date();
+                            tomorrow.setDate(tomorrow.getDate() + 2);
+                            extracted.admissionDate = tomorrow.toLocaleDateString('en-GB', {
+                                day: 'numeric',
+                                month: 'short',
+                                year: 'numeric'
+                            });
+                        } else if (messageLower.includes('next week')) {
+                            const nextWeek = new Date();
+                            nextWeek.setDate(nextWeek.getDate() + 7);
+                            extracted.admissionDate = nextWeek.toLocaleDateString('en-GB', {
+                                day: 'numeric',
+                                month: 'short',
+                                year: 'numeric'
+                            });
+                        } else if (admissionDate) {
+                            extracted.admissionDate = admissionDate;
                         }
+
+
+                        const timePattern = /(\d{1,2})(?::(\d{2}))?\s*(am|pm|a\.m\.|p\.m\.)/i;
+                        const timeMatch = userMessage.match(timePattern);
+                        if (timeMatch) {
+                            admissionTime = timeMatch[0];
+                        }
+
+                        if (admissionTime) {
+                            extracted.admissionTime = admissionTime;
+                          } else {
+                            // Map of common Hindi number words to digits
+                            const hindiNumberMap = {
+                              'ek': 1, 'do': 2, 'teen': 3, 'char': 4, 'paanch': 5, 'chhah': 6,
+                              'chhe': 6, 'saat': 7, 'aath': 8, 'nau': 9, 'dus': 10, 'gyarah': 11,
+                              'barah': 12, 'ek baje': 1, 'do baje': 2, 'teen baje': 3, 'char baje': 4,
+                              'paanch baje': 5, 'chhah baje': 6, 'chhe baje': 6, 'saat baje': 7,
+                              'aath baje': 8, 'nau baje': 9, 'dus baje': 10, 'gyarah baje': 11, 'barah baje': 12
+                            };
+                          
+                            const text = userMessage.toLowerCase();
+                          
+                            // Replace Hindi number words with digits for easier matching
+                            let normalizedText = text;
+                            for (const [word, num] of Object.entries(hindiNumberMap)) {
+                              const regex = new RegExp(`\\b${word}\\b`, 'gi');
+                              normalizedText = normalizedText.replace(regex, num.toString());
+                            }
+                          
+                            // Handle English & Hindi/roman time patterns
+                            const timePatterns = [
+                              /\b(\d{1,2})\s*(am|pm|a\.m\.|p\.m\.)\b/i,                      // English: 10 AM
+                              /\b(\d{1,2})\s*baje\b/i,                                       // 10 baje
+                              /\b(\d{1,2})\s*baje\s*(subah|dopahar|shaam|raat)?\b/i,         // 10 baje shaam
+                              /\b(\d{1,2})\s*(बजे|सुबह|शाम|रात|दोपहर)\b/i                   // Hindi script
+                            ];
+                          
+                            for (const pattern of timePatterns) {
+                              const match = normalizedText.match(pattern);
+                              if (match) {
+                                extracted.admissionTime = match[0].trim();
+                                break;
+                              }
+                            }
+                          }
+                          
+
+                        // Check for time
+                        // const timeMatch = userMessage.match(/(\d{1,2}):?(\d{2})?\s*(am|pm)?/i);
+                        // if (timeMatch) {
+                        //     extracted.admissionTime = timeMatch[0];
+                        // }
                     }
                     break;
 

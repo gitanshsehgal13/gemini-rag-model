@@ -397,9 +397,9 @@ My Personal Policy Assistant Response:`;
       words: [
         'mera', 'meri', 'mere', 'main', 'mai', 'hoon', 'hai', 'hain', 'ka', 'ki', 'ke', 'ko', 'se', 'par',
         'aur', 'ya', 'nahi', 'nahin', 'kya', 'kaise', 'kahan', 'kab', 'kyun', 'kitna', 'kitne', 'kitni',
-        'hoga', 'hogi', 'hoge', 'chahiye', 'chahie', 'paisa', 'paise', 'rupaye',
+        'hoga', 'hogi', 'hoge', 'chahiye', 'chahie', 'paisa', 'paise', 'rupaye',"hona","rupay","rupee",
         'bhi', 'jo', 'jis', 'jin', 'jab', 'tab', 'yah', 'yeh', 'vah', 'vo', 'woh', 'iske', 'uske', 'unka', 'unki',
-        'apna', 'apne', 'apni', 'hamara', 'hamare', 'hamari', 'tumhara', 'tumhare', 'tumhari'
+        'apna', 'apne', 'apni', 'hamara', 'hamare', 'hamari', 'tumhara', 'tumhare', 'tumhari',"sahi","galat","achha","theek","ji","haanji","nahiji"
       ],
       // Devanagari script detection
       devanagari: /[\u0900-\u097F]/

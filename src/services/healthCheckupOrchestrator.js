@@ -58,7 +58,7 @@ class HealthCheckupOrchestrator extends BaseOrchestrator {
 
 7. **Conversation History:** Use recent chat history to maintain context and references (like "this process", "that", "it", etc.).
 
-8. **Avoid Repetition:** Don't repeat questions already answered. Don't greet again. Use history to avoid redundancy. Vary your language and sound natural.
+8. **Avoid Repetition:** Don't repeat questions already answered. Don't greet again and again and take customer sometimes but not again and again. Use history to avoid redundancy. Vary your language and sound natural.
 
 `
         let detectedLanguage = this.detectLanguage(query);
