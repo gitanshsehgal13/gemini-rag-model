@@ -265,7 +265,7 @@ class BaseOrchestrator {
           "theek", "thik", "accha", "acha", "bahut", "bhi", "abhi", "kal",
           "aaj", "parso", "chahiye", "zarurat", "lekin", "kyunki", "kyon",
           "kaise", "kaun", "kya", "kab", "kis", "kisne", "kyu", "kyun",
-          "ko", "ki", "ke", "se", "mein", "me", "par", "pe", "tha", "thi",
+          "ko", "ki", "ke", "se", "mein", "par", "pe", "tha", "thi",
           "hoga", "hogi", "honge", "hoti", "hote", "raha", "rahe", "rha",
           // Pronouns & possessives
           "main", "mai", "meri", "mera", "mere", "tera", "teri", "tumhara",

@@ -1781,7 +1781,8 @@ Your response (medical condition only):`;
         intentConfig,
         orchestrator,
         customerId,
-        isFirstMessage
+        isFirstMessage,
+        query
       );
 
       // Save sent message to history
@@ -2081,17 +2082,12 @@ Available hospital departments:
 - Cardiology
 - Oncology
 - Ophthalmology
-- Radiology
-- Anesthesiology
-- Emergency Medicine
-- Intensive Care Unit (ICU)
-- Pathology
-- Microbiology
+
 
 Medical condition/reason: "${medicalReason}"
 
 Identify which ONE department from the list above would be most appropriate for treating this condition.
-Respond with ONLY the department name, nothing else.
+Respond with ONLY the department name, nothing else if the department is not found in the list, return "General Medicine".
 
 Examples:
 - "kidney stone" → Urology
@@ -2253,7 +2249,8 @@ Department:`;
     intentConfig,
     orchestrator,
     customerId,
-    isFirstMessage = false
+    isFirstMessage = false,
+    query
   ) {
     // Handle 'teleconsultation_response' stage specially
     if (nextStageId === "teleconsultation_response") {
@@ -2386,7 +2383,8 @@ Department:`;
     const stagePrompt = orchestrator.getStagePrompt(
       nextStage,
       collectedData,
-      isFirstMessage
+      isFirstMessage,
+      query
     );
 
     const firstName = this.policyInfo

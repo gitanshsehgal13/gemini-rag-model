@@ -1,3 +1,5 @@
+const BaseOrchestrator = require('./baseOrchestrator');
+
 /**
  * Conversation Orchestrator
  * Manages conversation state and flow based on stage definitions
@@ -13,13 +15,21 @@ class ConversationOrchestrator {
         this.conversationFlow.stages.forEach(stage => {
             this.stages.set(stage.id, stage);
         });
+
+        // Create a BaseOrchestrator helper instance to use its utility methods
+        // We use minimal/dummy parameters since we only need the response checking methods
+        const dummyIntentData = { brand_voice: {} };
+        const dummyGeminiService = null; // Not needed for isPositiveResponse/isNegativeResponse
+        const dummyHospitalService = null; // Not needed for isPositiveResponse/isNegativeResponse
+        this.baseOrchestrator = new BaseOrchestrator(dummyIntentData, dummyGeminiService, dummyHospitalService);
     }
 
     /**
      * System prompts that apply to all intents and stages
      */
-    getSystemPrompts() {
-        return `**Your RULES:**
+    getSystemPrompts(query) {
+        let prompts = "";
+        prompts = `**Your RULES:**
 
 1. **Role & Tone:** You are a Proactive TATA AIG Health Insurance Claim Concierge AI . Be professional, empathetic, and supportive. Prioritize clarity and conciseness. Acknowledge the user's message before transitioning to the next step. Assume the user may be stressed and avoid overly formal language. Never greet again after the first message in a session.
 2. **Formatting:** All responses must be formatted for WhatsApp. Use *bold* for key names or action items. Use line breaks (\\n) to improve readability.
@@ -28,6 +38,22 @@ class ConversationOrchestrator {
 5. **Process Focus:** Always guide the customer to the immediate next required step in the TATA AIG claims process. Do not jump ahead or discuss steps not yet relevant.
 6. **Conversation History:** If we have recent conversation history, use it to understand context and references (like "this process", "that", "it", etc.).
 7. DON'T repeat questions already answered above. DON'T greet again (only greet in first message). Use info from history (who, what, where mentioned)`;
+
+        let detectedLanguage = this.baseOrchestrator.detectLanguage(query);
+        console.log("**************detectedLanguage**************", detectedLanguage);
+        if (detectedLanguage === "Hindi") {
+            prompts += `You are a friendly and professional Indian-speaking assistant. 
+Always talk in **simple, natural Hindi**, just like how people actually speak — 
+a mix of conversational Hindi and a little bit of English (Hinglish), when natural.
+
+Guidelines:
+- Prefer common words over formal or literary Hindi.
+- Avoid overly technical or English-heavy sentences unless needed.
+- Add a friendly touch (like “jee”, “theek hai”, “acha”, “bilkul”, “zaroor”) when appropriate.
+- Example tone: “Ji bilkul, main help karta hoon.”
+Your goal: Sound like a helpful, natural Indian person — not a robot.`
+        }
+        return prompts;
     }
 
     /**
@@ -69,7 +95,7 @@ class ConversationOrchestrator {
         switch (currentStage.id) {
             case 'greeting':
                 // Check if user wants to proceed
-                if (this.isNegativeResponse(userResponse)) {
+                if (this.baseOrchestrator.isNegativeResponse(userResponse)) {
                     return transitions.no;
                 }
                 return transitions.yes || transitions.default;
@@ -88,7 +114,7 @@ class ConversationOrchestrator {
 
             case 'confirm_addmission_teleconsultation':
                 // Decide path: admission flow vs teleconsultation flow
-                if (userResponse.toLowerCase().includes('admission')||userResponse.toLowerCase().includes('admit')) {
+                if (userResponse.toLowerCase().includes('admission') || userResponse.toLowerCase().includes('admit')) {
                     collectedData.addmissionProcessInterest = 'yes';
                     return transitions.yes || currentStage.id;
                 } else if (userResponse.toLowerCase().includes('consultation') || userResponse.toLowerCase().includes('doctor')) {
@@ -154,10 +180,10 @@ class ConversationOrchestrator {
                 }
                 // If not set in collectedData, check user response directly (case-insensitive)
                 const userResponseLower = (userResponse || '').toLowerCase();
-                if (this.isPositiveResponse(userResponseLower)) {
+                if (this.baseOrchestrator.isPositiveResponse(userResponseLower)) {
                     collectedData.teleconsultationInterest = 'yes';
                     return transitions.yes;
-                } else if (this.isNegativeResponse(userResponseLower)) {
+                } else if (this.baseOrchestrator.isNegativeResponse(userResponseLower)) {
                     collectedData.teleconsultationInterest = 'no';
                     return transitions.no;
                 }
@@ -177,7 +203,7 @@ class ConversationOrchestrator {
 
             case 'admission_confirmed':
             case 'close_politely':
-                if (userResponse.toLowerCase().includes('admission')) {
+                if (userResponse.toLowerCase().includes('admission')||userResponse.toLowerCase().includes('admit')) {
                     return transitions.initialIntent;
                 } else {
                     return 'end';
@@ -295,9 +321,9 @@ class ConversationOrchestrator {
                     break;
 
                 case 'admissionConfirmed':
-                    if (this.isPositiveResponse(messageLower)) {
+                    if (this.baseOrchestrator.isPositiveResponse(messageLower)) {
                         extracted.admissionConfirmed = true;
-                    } else if (this.isNegativeResponse(messageLower)) {
+                    } else if (this.baseOrchestrator.isNegativeResponse(messageLower)) {
                         extracted.admissionConfirmed = false;
                     }
                     break;
@@ -342,17 +368,17 @@ class ConversationOrchestrator {
                     break;
 
                 case 'teleconsultationInterest':
-                    if (this.isPositiveResponse(messageLower)) {
+                    if (this.baseOrchestrator.isPositiveResponse(messageLower)) {
                         extracted.teleconsultationInterest = 'yes';
-                    } else if (this.isNegativeResponse(messageLower)) {
+                    } else if (this.baseOrchestrator.isNegativeResponse(messageLower)) {
                         extracted.teleconsultationInterest = 'no';
                     }
                     break;
 
                 case 'addmissionProcessInterest':
-                    if (this.isPositiveResponse(messageLower)) {
+                    if (this.baseOrchestrator.isPositiveResponse(messageLower)) {
                         extracted.addmissionProcessInterest = 'yes';
-                    } else if (this.isNegativeResponse(messageLower)) {
+                    } else if (this.baseOrchestrator.isNegativeResponse(messageLower)) {
                         extracted.addmissionProcessInterest = 'no';
                     }
                     break;
@@ -388,25 +414,6 @@ class ConversationOrchestrator {
         return extracted;
     }
 
-    /**
-     * Check if response is positive (yes, ok, sure, etc.)
-     * @param {string} message - User message
-     * @returns {boolean}
-     */
-    isPositiveResponse(message) {
-        const positive = ['yes', 'yeah', 'yep', 'sure', 'ok', 'okay', 'fine', 'correct', 'right', 'confirm'];
-        return positive.some(word => message.includes(word));
-    }
-
-    /**
-     * Check if response is negative (no, nope, etc.)
-     * @param {string} message - User message
-     * @returns {boolean}
-     */
-    isNegativeResponse(message) {
-        const negative = ['no', 'nope', 'nah', 'not', 'never'];
-        return negative.some(word => message.includes(word));
-    }
 
     /**
      * Check if user wants to skip
@@ -424,8 +431,8 @@ class ConversationOrchestrator {
      * @param {Object} collectedData - Data collected so far
      * @returns {string} - Prompt template
      */
-    getStagePrompt(stage, collectedData, isFirstMessage = false) {
-        const systemPrompts = this.getSystemPrompts();
+    getStagePrompt(stage, collectedData, isFirstMessage = false, query = '') {
+        const systemPrompts = this.getSystemPrompts(query);
 
         // Start with system prompts
         let prompt = `${systemPrompts}\n\n`;

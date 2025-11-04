@@ -22,7 +22,7 @@ class CommunicationService {
       from: "7503513591",
       to: "919136160375",
       direction: "INBOUND",
-      conversationId: "f55a87f3-ad73-467d-8e13-7aa2f491960c",
+      conversationId: "08780662-6b50-47d9-8700-740e49d1efc4",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       content: {
